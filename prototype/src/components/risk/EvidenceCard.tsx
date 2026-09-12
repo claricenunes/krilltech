@@ -15,11 +15,11 @@ function EvidenceCard({
   sourceType,
 }: EvidenceCardProps) {
   return (
-    <div className="rounded-xl border border-stone-200 bg-white p-4 shadow-sm">
-      <p className="text-sm font-medium text-stone-800">{title}</p>
-      <p className="mt-1.5 text-sm text-stone-500">{description}</p>
-      <div className="mt-3 flex items-center justify-between gap-3">
-        <p className="text-xs text-stone-400">Fonte: {source}</p>
+    <div className="rounded-2xl border border-sage-200/70 bg-white p-4 shadow-softer">
+      <p className="text-sm font-semibold text-forest-950">{title}</p>
+      <p className="mt-1.5 text-sm text-sage-600">{description}</p>
+      <div className="mt-3 flex items-center justify-between gap-3 border-t border-sage-100 pt-3">
+        <p className="text-xs text-sage-400">Fonte: {source}</p>
         <DataSourceTag type={sourceType} />
       </div>
     </div>

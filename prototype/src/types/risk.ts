@@ -1,6 +1,11 @@
 export type Rating = 'A' | 'B' | 'C' | 'D'
 
-export type DataSourceType = 'REAL' | 'MOCK' | 'SNAPSHOT' | 'CALCULADO'
+export type DataSourceType =
+  | 'REAL'
+  | 'MOCK'
+  | 'SNAPSHOT'
+  | 'CALCULADO'
+  | 'SIMULACAO'
 
 export type TrendDirection = 'up' | 'down' | 'stable'
 
@@ -10,7 +15,10 @@ export interface Trend {
   label?: string
 }
 
+export type RiskFactorKey = 'judicial' | 'ambiental' | 'clima' | 'financeiro'
+
 export interface RiskFactor {
+  factorKey: RiskFactorKey
   title: string
   weight: number
   status: string

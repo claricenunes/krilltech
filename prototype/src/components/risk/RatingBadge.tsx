@@ -1,38 +1,21 @@
 import type { Rating } from '../../types/risk'
+import { RATING_META } from '../../utils/rating'
 
-const ratingStyles: Record<Rating, { classes: string; description: string }> = {
-  A: {
-    classes: 'border-emerald-200 bg-emerald-50 text-emerald-800',
-    description: 'Baixo risco',
-  },
-  B: {
-    classes: 'border-amber-200 bg-amber-50 text-amber-800',
-    description: 'Risco moderado',
-  },
-  C: {
-    classes: 'border-orange-200 bg-orange-50 text-orange-800',
-    description: 'Risco elevado',
-  },
-  D: {
-    classes: 'border-red-200 bg-red-50 text-red-800',
-    description: 'Risco crítico',
-  },
-}
-
-function RatingBadge({ rating }: { rating: Rating }) {
-  const style = ratingStyles[rating]
+function RatingBadge({ rating, size = 'lg' }: { rating: Rating; size?: 'lg' | 'md' }) {
+  const style = RATING_META[rating]
+  const dimensions = size === 'lg' ? 'h-14 w-14 text-3xl' : 'h-11 w-11 text-xl'
 
   return (
     <div>
-      <p className="text-xs font-medium uppercase tracking-wide text-stone-500">
+      <p className="text-xs font-medium uppercase tracking-wide text-sage-500">
         Rating
       </p>
       <div
-        className={`mt-1 inline-flex h-12 w-12 items-center justify-center rounded-lg border text-2xl font-semibold ${style.classes}`}
+        className={`mt-1.5 inline-flex items-center justify-center rounded-2xl border font-bold ${style.badgeClasses} ${dimensions}`}
       >
         {rating}
       </div>
-      <p className="mt-1.5 text-xs text-stone-400">{style.description}</p>
+      <p className="mt-1.5 text-xs text-sage-500">{style.description}</p>
     </div>
   )
 }

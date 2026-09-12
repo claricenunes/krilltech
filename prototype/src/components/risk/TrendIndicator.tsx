@@ -1,3 +1,4 @@
+import { ArrowDown, ArrowRight, ArrowUp } from 'lucide-react'
 import type { TrendDirection } from '../../types/risk'
 
 interface TrendIndicatorProps {
@@ -6,33 +7,33 @@ interface TrendIndicatorProps {
   label?: string
 }
 
-const arrows: Record<TrendDirection, string> = {
-  up: '↑',
-  down: '↓',
-  stable: '→',
+const icons: Record<TrendDirection, typeof ArrowUp> = {
+  up: ArrowUp,
+  down: ArrowDown,
+  stable: ArrowRight,
 }
 
 const toneClasses: Record<TrendDirection, string> = {
-  up: 'text-amber-700',
-  down: 'text-emerald-700',
-  stable: 'text-stone-500',
+  up: 'text-alert-orange-600',
+  down: 'text-forest-600',
+  stable: 'text-sage-500',
 }
 
 function TrendIndicator({ direction, value, label }: TrendIndicatorProps) {
+  const Icon = icons[direction]
+
   return (
     <div>
-      <p className="text-xs font-medium uppercase tracking-wide text-stone-500">
+      <p className="text-xs font-medium uppercase tracking-wide text-sage-500">
         Tendência
       </p>
-      <p className={`mt-1 text-3xl font-semibold ${toneClasses[direction]}`}>
-        {arrows[direction]}
+      <p className={`mt-1.5 flex items-center gap-1.5 text-2xl font-bold ${toneClasses[direction]}`}>
+        <Icon className="h-5 w-5" strokeWidth={2.6} />
         {typeof value === 'number' && (
-          <span className="ml-1 text-2xl">
-            {value > 0 ? `+${value}` : value} pontos
-          </span>
+          <span>{value > 0 ? `+${value}` : value} pts</span>
         )}
       </p>
-      {label && <p className="mt-1.5 text-xs text-stone-400">{label}</p>}
+      {label && <p className="mt-1.5 text-xs text-sage-500">{label}</p>}
     </div>
   )
 }

@@ -1,44 +1,81 @@
-import { useParams } from 'react-router-dom'
-import Breadcrumb from '../components/layout/Breadcrumb'
-import Container from '../components/layout/Container'
-import PageHeader from '../components/layout/PageHeader'
-import PlaceholderBlock from '../components/layout/PlaceholderBlock'
-import RiskReport from '../components/risk/RiskReport'
-import { mockRiskReport } from '../data/mock-risk'
+import { ArrowLeft } from 'lucide-react'
+import { useMemo } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import PageShell from '../components/layout/PageShell'
+import ScreeningResult from '../components/risk/ScreeningResult'
+import SimulatorPanel from '../components/simulator/SimulatorPanel'
+import { getClientById } from '../data/mockClients'
+import { buildRiskReportForRating } from '../data/mock-risk'
+import { STATUS_META } from '../utils/rating'
 
 function Produtor() {
   const { id } = useParams()
+  const client = id ? getClientById(id) : undefined
+
+  const report = useMemo(
+    () => (client ? buildRiskReportForRating(client.rating) : null),
+    [client],
+  )
+
+  if (!client || !report) {
+    return (
+      <PageShell title="Cliente não encontrado" subtitle="Verifique o link acessado.">
+        <div className="rounded-2xl border border-sage-200/70 bg-white p-8 text-center shadow-softer">
+          <p className="text-sm text-sage-500">
+            Não encontramos um cliente com este identificador na carteira demonstrativa.
+          </p>
+          <Link
+            to="/carteira"
+            className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-forest-700 hover:text-forest-900"
+          >
+            <ArrowLeft className="h-4 w-4" strokeWidth={2.2} />
+            Voltar para a carteira
+          </Link>
+        </div>
+      </PageShell>
+    )
+  }
 
   return (
-    <Container>
-      <Breadcrumb
-        items={[{ label: 'Radar da Carteira', to: '/' }, { label: 'Produtor' }]}
-      />
-      <PageHeader
-        title="Análise do Produtor"
-        subtitle="Visão detalhada dos fatores que influenciam o risco deste cliente."
-      />
+    <PageShell
+      title={client.name}
+      subtitle={`${client.culture} · ${client.region} (${client.state})`}
+    >
+      <div className="mx-auto flex max-w-4xl flex-col gap-6">
+        <Link
+          to="/carteira"
+          className="inline-flex w-fit items-center gap-1.5 text-sm font-medium text-forest-700 transition-colors hover:text-forest-900"
+        >
+          <ArrowLeft className="h-4 w-4" strokeWidth={2.2} />
+          Voltar para a carteira
+        </Link>
 
-      <div className="mb-6 rounded-lg border border-dashed border-stone-300 bg-stone-100 px-4 py-2 text-xs font-medium text-stone-500">
-        MOCK — dados de demonstração para o produtor #{id}, sem relação com
-        clientes reais da KRILLTECH. Usado apenas para validar os componentes
-        visuais desta etapa.
-      </div>
+        <div className="rounded-xl border border-dashed border-sage-300 bg-sage-50 px-4 py-2.5 text-xs font-medium text-sage-500">
+          MOCK — dados de demonstração para {client.name}, sem relação com
+          clientes reais da KRILLTECH.
+        </div>
 
-      <div className="flex flex-col gap-6">
-        <RiskReport
-          score={mockRiskReport.score}
-          rating={mockRiskReport.rating}
-          trend={mockRiskReport.trend}
-          factors={mockRiskReport.factors}
-          evidences={mockRiskReport.evidences}
+        <ScreeningResult
+          clientName={client.name}
+          document={client.document}
+          score={client.score}
+          rating={client.rating}
+          operationalStatus={STATUS_META[client.status].label}
+          trend={report.trend}
+          factors={report.factors}
+          evidences={[]}
+          recommendationTitle={report.recommendationTitle}
+          recommendationBody={report.recommendationBody}
         />
-        <PlaceholderBlock
-          title="Simulador"
-          description="Simulador de cenário será implementado na próxima etapa."
+
+        <SimulatorPanel
+          currentScore={client.score}
+          currentRating={client.rating}
+          currentRevenue={client.annualRevenue}
+          fixedCosts={client.fixedCosts}
         />
       </div>
-    </Container>
+    </PageShell>
   )
 }
 

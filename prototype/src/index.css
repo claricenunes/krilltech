@@ -1,15 +1,122 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap");
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Manrope", "Inter", system-ui, sans-serif;
+
+  /* Verde floresta — sidebar, textos de marca, elementos de maior peso */
+  --color-forest-950: #0f2417;
+  --color-forest-900: #14301e;
+  --color-forest-800: #1b3d27;
+  --color-forest-700: #234c31;
+  --color-forest-600: #2d5f3d;
+  --color-forest-500: #39754c;
+  --color-forest-400: #4f8f61;
+  --color-forest-300: #7bad86;
+  --color-forest-200: #aecbb1;
+  --color-forest-100: #dbe7db;
+  --color-forest-50: #f0f5ee;
+
+  /* Verde sálvia — superfícies secundárias, badges neutras */
+  --color-sage-600: #6d8a68;
+  --color-sage-500: #86a181;
+  --color-sage-400: #a3ba9c;
+  --color-sage-300: #c2d3ba;
+  --color-sage-200: #dde8d5;
+  --color-sage-100: #edf2e6;
+  --color-sage-50: #f5f7f0;
+
+  /* Off-white / creme — fundo geral da aplicação */
+  --color-cream-100: #f1ede0;
+  --color-cream-50: #f8f6ee;
+  --color-cream-25: #fbfaf4;
+
+  /* Terracota — acentos de ilustração, calor visual */
+  --color-clay-600: #a85a34;
+  --color-clay-500: #c17a49;
+  --color-clay-400: #d59a67;
+  --color-clay-300: #e5bd93;
+  --color-clay-100: #f4e6d4;
+
+  /* Alerta — usado com moderação, apenas para risco */
+  --color-alert-red-700: #9c2b1f;
+  --color-alert-red-600: #c0392b;
+  --color-alert-red-500: #d94a3a;
+  --color-alert-red-100: #fbe4e0;
+  --color-alert-red-50: #fdf1ef;
+
+  --color-alert-orange-700: #a0530f;
+  --color-alert-orange-600: #c06a1a;
+  --color-alert-orange-500: #dd8a34;
+  --color-alert-orange-100: #faead2;
+  --color-alert-orange-50: #fdf4e8;
+
+  --color-alert-amber-600: #b8901a;
+  --color-alert-amber-500: #d1a838;
+  --color-alert-amber-100: #f9edcf;
+  --color-alert-amber-50: #fdf7e6;
+
+  --shadow-soft: 0 1px 2px rgba(20, 40, 26, 0.04), 0 8px 24px -8px rgba(20, 40, 26, 0.10);
+  --shadow-softer: 0 1px 2px rgba(20, 40, 26, 0.03), 0 4px 14px -6px rgba(20, 40, 26, 0.08);
+  --shadow-lifted: 0 4px 8px rgba(20, 40, 26, 0.05), 0 20px 40px -16px rgba(20, 40, 26, 0.18);
+
+  --animate-fade-up: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade-in: fade-in 0.4s ease-out both;
+  --animate-scale-in: scale-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 }
 
 body {
   margin: 0;
   font-family: var(--font-sans);
-  color: #1c1917;
-  background-color: #fafaf9;
+  color: #1a231b;
+  background-color: var(--color-cream-50);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: var(--color-forest-200);
+  color: var(--color-forest-950);
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: var(--color-sage-300);
+  border-radius: 999px;
 }

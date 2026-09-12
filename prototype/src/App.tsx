@@ -1,20 +1,22 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Header from './components/layout/Header'
+import Carteira from './pages/Carteira'
+import Configuracoes from './pages/Configuracoes'
+import Dashboard from './pages/Dashboard'
 import Produtor from './pages/Produtor'
-import Radar from './pages/Radar'
+import Relatorios from './pages/Relatorios'
 import Triagem from './pages/Triagem'
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-stone-50">
-        <Header />
-        <Routes>
-          <Route path="/" element={<Radar />} />
-          <Route path="/triagem" element={<Triagem />} />
-          <Route path="/produtor/:id" element={<Produtor />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/triagem" element={<Triagem />} />
+        <Route path="/carteira" element={<Carteira />} />
+        <Route path="/relatorios" element={<Relatorios />} />
+        <Route path="/configuracoes" element={<Configuracoes />} />
+        <Route path="/produtor/:id" element={<Produtor />} />
+      </Routes>
     </BrowserRouter>
   )
 }
