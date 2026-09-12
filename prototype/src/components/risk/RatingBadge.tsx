@@ -1,9 +1,14 @@
 import type { Rating } from '../../types/risk'
 import { RATING_META } from '../../utils/rating'
 
-function RatingBadge({ rating, size = 'lg' }: { rating: Rating; size?: 'lg' | 'md' }) {
+function RatingBadge({ rating, size = 'lg' }: { rating: Rating; size?: 'lg' | 'md' | 'sm' }) {
   const style = RATING_META[rating]
-  const dimensions = size === 'lg' ? 'h-14 w-14 text-3xl' : 'h-11 w-11 text-xl'
+  const dimensions =
+    size === 'lg'
+      ? 'h-14 w-14 text-3xl'
+      : size === 'md'
+        ? 'h-11 w-11 text-xl'
+        : 'h-8 w-8 text-sm'
 
   return (
     <div>

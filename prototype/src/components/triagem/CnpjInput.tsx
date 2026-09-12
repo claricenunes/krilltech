@@ -38,7 +38,7 @@ function CnpjInput({ onSubmit, isLoading }: CnpjInputProps) {
         Nova triagem
       </p>
       <label htmlFor="cnpj" className="mt-3 block text-sm font-medium text-forest-800">
-        CNPJ
+        CNPJ ou CPF
       </label>
       <div className="mt-2 flex flex-col gap-3 sm:flex-row">
         <div
@@ -64,9 +64,9 @@ function CnpjInput({ onSubmit, isLoading }: CnpjInputProps) {
         <button
           type="submit"
           disabled={isLoading}
-          className="inline-flex items-center justify-center rounded-xl bg-forest-700 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-forest-800 disabled:cursor-not-allowed disabled:bg-sage-300 sm:flex-shrink-0"
+          className="inline-flex items-center justify-center gap-2 rounded-full bg-forest-700 px-6 py-3 text-sm font-semibold text-white shadow-softer transition-all hover:bg-forest-800 hover:shadow-soft active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-sage-300 sm:flex-shrink-0"
         >
-          {isLoading ? 'Consultando cadastro...' : 'Analisar cliente'}
+          {isLoading ? 'Consultando cadastro...' : 'Analisar cliente →'}
         </button>
       </div>
       {error && <p className="mt-2 text-sm text-alert-red-600">{error}</p>}
