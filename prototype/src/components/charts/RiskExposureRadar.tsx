@@ -43,6 +43,7 @@ function scaleRadius(exposure: number, maxExposure: number): number {
 function RiskExposureRadar({ produtores }: RiskExposureRadarProps) {
   const navigate = useNavigate()
   const [hoveredId, setHoveredId] = useState<string | null>(null)
+  const [hoveredPosition, setHoveredPosition] = useState<{ cx: number; cy: number } | null>(null)
 
   const maxExposure = useMemo(
     () => Math.max(...produtores.map((p) => p.exposicao), 1),
@@ -161,8 +162,14 @@ function RiskExposureRadar({ produtores }: RiskExposureRadarProps) {
                 stroke="white"
                 strokeWidth={isHovered ? 2.5 : 1.5}
                 className="cursor-pointer transition-all"
-                onMouseEnter={() => setHoveredId(produtor.cliente_id)}
-                onMouseLeave={() => setHoveredId(null)}
+                onMouseEnter={() => {
+                  setHoveredId(produtor.cliente_id)
+                  setHoveredPosition({ cx, cy })
+                }}
+                onMouseLeave={() => {
+                  setHoveredId(null)
+                  setHoveredPosition(null)
+                }}
                 onClick={() => navigate(`/produtor/${produtor.cliente_id}`)}
               />
             </g>
@@ -170,8 +177,18 @@ function RiskExposureRadar({ produtores }: RiskExposureRadarProps) {
         })}
       </svg>
 
-      {hovered && (
-        <div className="pointer-events-none absolute left-1/2 top-2 w-56 -translate-x-1/2 rounded-xl border border-sage-200 bg-white p-3 text-xs shadow-lifted">
+      {hovered && hoveredPosition && (
+        <div
+          className="pointer-events-none absolute w-56 rounded-xl border border-sage-200 bg-white p-3 text-xs shadow-lifted"
+          style={{
+            left: `${Math.min(84, Math.max(16, (hoveredPosition.cx / WIDTH) * 100))}%`,
+            top: `${(hoveredPosition.cy / HEIGHT) * 100}%`,
+            transform:
+              (hoveredPosition.cy / HEIGHT) * 100 < 30
+                ? 'translate(-50%, 18px)'
+                : 'translate(-50%, calc(-100% - 18px))',
+          }}
+        >
           <p className="font-semibold text-forest-950">{hovered.nome}</p>
           <p className="mt-0.5 text-sage-500">{hovered.regiao} · {hovered.cultura}</p>
           <div className="mt-2 flex items-center justify-between">

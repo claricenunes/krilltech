@@ -91,7 +91,7 @@ function fetchMock<T>(arquivo: string): Promise<T> {
   if (!cache.has(arquivo)) {
     cache.set(
       arquivo,
-      fetch(`/mock-data/${arquivo}`).then((res) => {
+      fetch(`${import.meta.env.BASE_URL}mock-data/${arquivo}`).then((res) => {
         if (!res.ok) {
           throw new KrillApiError(`Não foi possível carregar ${arquivo}.`)
         }
