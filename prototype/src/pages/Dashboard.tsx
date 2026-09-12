@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import RiskExposureRadar from '../components/charts/RiskExposureRadar'
 import ExposureHero from '../components/dashboard/ExposureHero'
+import MonitoringStatusBar from '../components/dashboard/MonitoringStatusBar'
 import PriorityAlertCard from '../components/dashboard/PriorityAlertCard'
 import RiskProjection from '../components/dashboard/RiskProjection'
 import Logo from '../components/layout/Logo'
@@ -16,7 +17,9 @@ import {
   getProdutor,
   getProdutores,
   getSafra,
+  getStatusMonitoramento,
   KrillApiError,
+  type StatusMonitoramento,
 } from '../services/api/staticData'
 import type { HomeSummary, PriorityAlert } from '../types/portfolio'
 import type { Rating } from '../types/risk'
@@ -38,6 +41,7 @@ function Dashboard() {
   const [alerts, setAlerts] = useState<PriorityAlert[]>([])
   const [produtores, setProdutores] = useState<ApiProdutor[]>([])
   const [featured, setFeatured] = useState<FeaturedProjection | null>(null)
+  const [statusMonitoramento, setStatusMonitoramento] = useState<StatusMonitoramento | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -49,12 +53,16 @@ function Dashboard() {
       setError(null)
 
       try {
-        const [dashboard, todosProdutores] = await Promise.all([
+        const [dashboard, todosProdutores, status] = await Promise.all([
           getAlertasDashboard(),
           getProdutores(),
+          getStatusMonitoramento(),
         ])
 
-        if (!cancelled) setProdutores(todosProdutores)
+        if (!cancelled) {
+          setProdutores(todosProdutores)
+          setStatusMonitoramento(status)
+        }
 
         const resolved = await Promise.all(
           dashboard.alertas.map(async (item) => {
@@ -192,6 +200,13 @@ function Dashboard() {
         />
 
         <div className="relative mx-auto flex max-w-6xl flex-col gap-8">
+          {statusMonitoramento && (
+            <MonitoringStatusBar
+              ultimaVerificacao={statusMonitoramento.ultimaVerificacao}
+              clientesMonitorados={statusMonitoramento.clientesMonitorados}
+            />
+          )}
+
           <ExposureHero summary={summary} />
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">

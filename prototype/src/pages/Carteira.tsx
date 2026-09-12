@@ -2,8 +2,15 @@ import { Filter, Loader2 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import ClientTable from '../components/dashboard/ClientTable'
 import RiskExposureRadar from '../components/charts/RiskExposureRadar'
+import MonitoringStatusBar from '../components/dashboard/MonitoringStatusBar'
 import PageShell from '../components/layout/PageShell'
-import { getProdutores, getRanking, KrillApiError } from '../services/api/staticData'
+import {
+  getProdutores,
+  getRanking,
+  getStatusMonitoramento,
+  KrillApiError,
+  type StatusMonitoramento,
+} from '../services/api/staticData'
 import { produtorAndRankingToPortfolioClient } from '../services/api/mappers'
 import type { ApiProdutor } from '../services/api/krillApi'
 import type { ClientStatus, PortfolioClient } from '../types/portfolio'
@@ -22,6 +29,7 @@ const STATUSES: Array<'Todos' | ClientStatus> = [
 function Carteira() {
   const [clients, setClients] = useState<PortfolioClient[]>([])
   const [produtores, setProdutores] = useState<ApiProdutor[]>([])
+  const [statusMonitoramento, setStatusMonitoramento] = useState<StatusMonitoramento | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -37,9 +45,10 @@ function Carteira() {
       setError(null)
 
       try {
-        const [produtores, rankingResponse] = await Promise.all([
+        const [produtores, rankingResponse, status] = await Promise.all([
           getProdutores(),
           getRanking(),
+          getStatusMonitoramento(),
         ])
 
         if (cancelled) return
@@ -49,6 +58,7 @@ function Carteira() {
         )
 
         setProdutores(produtores)
+        setStatusMonitoramento(status)
         setClients(
           produtores.map((produtor) =>
             produtorAndRankingToPortfolioClient(produtor, rankingById.get(produtor.cliente_id)),
@@ -97,6 +107,15 @@ function Carteira() {
       title="Carteira"
       subtitle="Todos os clientes monitorados pelo KrillRadar, com filtros por região, rating e status."
     >
+      {statusMonitoramento && (
+        <div className="mb-6">
+          <MonitoringStatusBar
+            ultimaVerificacao={statusMonitoramento.ultimaVerificacao}
+            clientesMonitorados={statusMonitoramento.clientesMonitorados}
+          />
+        </div>
+      )}
+
       {!loading && !error && filteredProdutores.length > 0 && (
         <section className="mb-6 rounded-2xl border border-sage-200/70 bg-white p-5 shadow-softer sm:p-6">
           <h3 className="text-base font-semibold text-forest-950">
