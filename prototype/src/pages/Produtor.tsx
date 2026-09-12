@@ -15,7 +15,45 @@ import {
 } from '../services/api/staticData'
 import type { ApiProdutor } from '../services/api/krillApi'
 import { classificacaoToStatus } from '../services/api/mappers'
+import { LIMITACOES_MODELO } from '../data/relatorioLimitacoes'
+import type { Evidence } from '../types/risk'
+import { formatDate } from '../utils/date'
 import { STATUS_META } from '../utils/rating'
+
+function construirEvidencias(produtor: ApiProdutor): Evidence[] {
+  return [
+    {
+      title: 'Situação cadastral',
+      description: `${produtor.situacao_cadastral === 'ATIVA' ? 'Empresa ativa' : produtor.situacao_cadastral}, CAR ${produtor.car_regular ? 'regular' : 'irregular'}.`,
+      source: 'Cadastro da carteira',
+      sourceType: 'MOCK',
+    },
+    {
+      title: 'Situação judicial',
+      description: produtor.recuperacao_judicial
+        ? 'Recuperação judicial em curso.'
+        : produtor.processos_judiciais > 0
+          ? `${produtor.processos_judiciais} processo(s) judicial(is) identificado(s), sem recuperação judicial.`
+          : 'Nenhum processo judicial relevante identificado.',
+      source: 'Base jurídica (mock)',
+      sourceType: 'MOCK',
+    },
+    {
+      title: 'Conformidade ambiental',
+      description: produtor.ibama_embargo_ativo
+        ? 'Embargo ambiental ativo identificado em área de produção.'
+        : 'Sem embargos ambientais ativos.',
+      source: 'IBAMA (mock)',
+      sourceType: 'MOCK',
+    },
+    {
+      title: 'Produtividade da região',
+      description: `Produtividade projetada de ${produtor.produtividade_projetada} sc/ha, frente a uma média histórica de ${produtor.produtividade_media_ha} sc/ha na região ${produtor.regiao}.`,
+      source: 'Dados agroclimáticos (mock)',
+      sourceType: 'MOCK',
+    },
+  ]
+}
 
 const TIMELINE_LABELS: Record<TimelineEvento['tipo'], string> = {
   cadastral: 'Cadastral',
@@ -108,6 +146,8 @@ function Produtor() {
   }
 
   const status = classificacaoToStatus(produtor.classificacao ?? 'MODERADO')
+  const ultimoEvento = timeline[timeline.length - 1]
+  const atualizadoEm = ultimoEvento ? formatDate(ultimoEvento.data) : formatDate(new Date().toISOString())
 
   return (
     <PageShell
@@ -136,9 +176,11 @@ function Produtor() {
           operationalStatus={STATUS_META[status].label}
           trend={{ direction: 'stable', label: 'Ver histórico completo na timeline abaixo.' }}
           factors={score.fatores}
-          evidences={[]}
+          evidences={construirEvidencias(produtor)}
           recommendationTitle="Recomendação do Sentinela Krill"
           recommendationBody={sintese?.recomendacao ?? ''}
+          atualizadoEm={atualizadoEm}
+          limitacoes={LIMITACOES_MODELO}
         />
 
         {sintese && (

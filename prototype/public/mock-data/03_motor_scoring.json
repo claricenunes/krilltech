@@ -6,7 +6,7 @@
     "cadastral": 0.20
   },
   "resultados": {
-    "12345678000199": {
+    "12345678000195": {
       "score": 690,
       "rating": "B",
       "fatores": [
@@ -16,7 +16,7 @@
         { "factorKey": "cadastral", "title": "Cadastral", "weight": 20, "status": "Regular", "description": "Empresa ativa desde 2014, sem pendências cadastrais." }
       ]
     },
-    "98765432000110": {
+    "98765432000198": {
       "score": 380,
       "rating": "D",
       "fatores": [
@@ -26,7 +26,7 @@
         { "factorKey": "cadastral", "title": "Cadastral", "weight": 20, "status": "Atenção", "description": "Histórico de atraso de pagamento acima de 30 dias." }
       ]
     },
-    "45678912000133": {
+    "45678912000155": {
       "score": 860,
       "rating": "A",
       "fatores": [
@@ -36,7 +36,7 @@
         { "factorKey": "cadastral", "title": "Cadastral", "weight": 20, "status": "Regular", "description": "Empresa ativa desde 2011, histórico de pagamento saudável." }
       ]
     },
-    "23456789000144": {
+    "23456789000195": {
       "score": 540,
       "rating": "C",
       "fatores": [
@@ -46,7 +46,7 @@
         { "factorKey": "cadastral", "title": "Cadastral", "weight": 20, "status": "Regular", "description": "Empresa ativa desde 2016, sem pendências cadastrais." }
       ]
     },
-    "34567891000155": {
+    "34567891000184": {
       "score": 902,
       "rating": "A",
       "fatores": [

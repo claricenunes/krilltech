@@ -1,6 +1,6 @@
 {
-  "12345678000199": {
-    "cnpj": "12345678000199",
+  "12345678000195": {
+    "cnpj": "12345678000195",
     "razao_social": "Fazenda Boa Vista Ltda.",
     "situacao_cadastral": "ATIVA",
     "natureza_juridica": "Sociedade Empresária Limitada",
@@ -15,8 +15,8 @@
     "car_regular": true,
     "historico_atraso_dias": 18
   },
-  "98765432000110": {
-    "cnpj": "98765432000110",
+  "98765432000198": {
+    "cnpj": "98765432000198",
     "razao_social": "Agropecuária Rio Verde S.A.",
     "situacao_cadastral": "ATIVA",
     "natureza_juridica": "Sociedade Anônima Fechada",
@@ -31,8 +31,8 @@
     "car_regular": true,
     "historico_atraso_dias": 46
   },
-  "45678912000133": {
-    "cnpj": "45678912000133",
+  "45678912000155": {
+    "cnpj": "45678912000155",
     "razao_social": "Sementes do Cerrado Ltda.",
     "situacao_cadastral": "ATIVA",
     "natureza_juridica": "Sociedade Empresária Limitada",
@@ -47,8 +47,8 @@
     "car_regular": true,
     "historico_atraso_dias": 4
   },
-  "23456789000144": {
-    "cnpj": "23456789000144",
+  "23456789000195": {
+    "cnpj": "23456789000195",
     "razao_social": "Agro Vale Participações Ltda.",
     "situacao_cadastral": "ATIVA",
     "natureza_juridica": "Sociedade Empresária Limitada",
@@ -63,8 +63,8 @@
     "car_regular": true,
     "historico_atraso_dias": 12
   },
-  "34567891000155": {
-    "cnpj": "34567891000155",
+  "34567891000184": {
+    "cnpj": "34567891000184",
     "razao_social": "Fazenda Serrana do Sul Ltda.",
     "situacao_cadastral": "ATIVA",
     "natureza_juridica": "Sociedade Empresária Limitada",

@@ -12,7 +12,10 @@ import {
   KrillApiError,
   type FatorScoring,
 } from '../services/api/staticData'
+import { LIMITACOES_MODELO } from '../data/relatorioLimitacoes'
 import type { CompanyData } from '../types/company'
+import type { Evidence } from '../types/risk'
+import { formatDate } from '../utils/date'
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
@@ -32,8 +35,10 @@ interface TriagemResultado {
   score: number
   rating: 'A' | 'B' | 'C' | 'D'
   fatores: FatorScoring[]
+  evidencias: Evidence[]
   recomendacao: string
   textoExplicativo: string
+  atualizadoEm: string
 }
 
 function Triagem() {
@@ -65,6 +70,43 @@ function Triagem() {
       await delay(STEPS[3].delay)
       const sintese = await getSintese(cnpj)
 
+      const evidencias: Evidence[] = [
+        {
+          title: 'Situação cadastral',
+          description: `${coletor.situacao_cadastral === 'ATIVA' ? 'Empresa ativa' : coletor.situacao_cadastral}, aberta em ${formatDate(coletor.data_abertura)}, CAR ${coletor.car_regular ? 'regular' : 'irregular'}.`,
+          source: 'Cadastro (mock)',
+          sourceType: 'MOCK',
+        },
+        {
+          title: 'Situação judicial',
+          description: coletor.recuperacao_judicial
+            ? 'Recuperação judicial em curso.'
+            : coletor.processos_judiciais > 0
+              ? `${coletor.processos_judiciais} processo(s) judicial(is) identificado(s), sem recuperação judicial.`
+              : 'Nenhum processo judicial relevante identificado.',
+          source: 'CNJ / DataJud (mock)',
+          sourceType: 'MOCK',
+        },
+        {
+          title: 'Conformidade ambiental',
+          description: coletor.embargo_ambiental_ativo
+            ? 'Embargo ambiental ativo identificado.'
+            : 'Sem embargos ambientais ativos.',
+          source: 'IBAMA (mock)',
+          sourceType: 'MOCK',
+        },
+        ...(clima
+          ? [
+              {
+                title: 'Produtividade da região',
+                description: `Produtividade projetada de ${clima.produtividade_projetada} sc/ha (variação de ${clima.variacao_percentual}%) na região ${coletor.regiao}.`,
+                source: 'Dados agroclimáticos (mock)',
+                sourceType: 'MOCK' as const,
+              },
+            ]
+          : []),
+      ]
+
       setResultado({
         company: {
           cnpj: coletor.cnpj,
@@ -78,10 +120,12 @@ function Triagem() {
         score: scoring.score,
         rating: scoring.rating,
         fatores: scoring.fatores,
+        evidencias,
         recomendacao: sintese.recomendacao,
         textoExplicativo: clima
           ? sintese.texto_explicativo
           : `${sintese.texto_explicativo} (Dados climáticos da região ${coletor.regiao} indisponíveis.)`,
+        atualizadoEm: formatDate(new Date().toISOString()),
       })
       setStatus('success')
     } catch (error) {
@@ -104,8 +148,8 @@ function Triagem() {
 
         {status === 'idle' && (
           <p className="text-center text-sm text-sage-400">
-            Digite um CNPJ da base de demonstração: 12345678000199, 98765432000110 ou
-            45678912000133.
+            Digite um CNPJ da base de demonstração: 12345678000195, 98765432000198 ou
+            45678912000155.
           </p>
         )}
 
@@ -162,9 +206,11 @@ function Triagem() {
               operationalStatus={resultado.rating === 'A' ? 'Saudável' : resultado.rating === 'D' ? 'Crítico' : 'Atenção'}
               trend={{ direction: 'stable' }}
               factors={resultado.fatores}
-              evidences={[]}
+              evidences={resultado.evidencias}
               recommendationTitle="Recomendação do Sentinela Krill"
               recommendationBody={resultado.recomendacao}
+              atualizadoEm={resultado.atualizadoEm}
+              limitacoes={LIMITACOES_MODELO}
             />
 
             <section className="rounded-2xl border border-sage-200/70 bg-white p-5 shadow-softer sm:p-6">

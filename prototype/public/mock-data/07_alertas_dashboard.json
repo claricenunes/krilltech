@@ -9,7 +9,7 @@
       "id": "a1",
       "nivel": "critico",
       "titulo": "Recuperação judicial identificada",
-      "produtor_id": "98765432000110",
+      "produtor_id": "98765432000198",
       "resumo": "Agropecuária Rio Verde S.A. teve pedido de recuperação judicial deferido, com R$ 2,4 milhões de exposição.",
       "acao_sugerida": "Não ampliar exposição; reavaliar condições de pagamento imediatamente."
     },
@@ -17,7 +17,7 @@
       "id": "a2",
       "nivel": "atencao_precoce",
       "titulo": "Embargo ambiental ativo",
-      "produtor_id": "23456789000144",
+      "produtor_id": "23456789000195",
       "resumo": "Agro Vale Participações Ltda. teve área de produção embargada pelo IBAMA, reduzindo o rating de B para C.",
       "acao_sugerida": "Exigir regularização ambiental antes de qualquer ampliação de limite."
     },
@@ -25,7 +25,7 @@
       "id": "a3",
       "nivel": "atencao_precoce",
       "titulo": "Queda de produtividade projetada",
-      "produtor_id": "12345678000199",
+      "produtor_id": "12345678000195",
       "resumo": "Fazenda Boa Vista Ltda. está na região Centro-Oeste, com queda de produtividade projetada de 7,7% para a safra atual.",
       "acao_sugerida": "Monitorar a evolução da safra antes de decidir sobre ampliação de limite."
     }

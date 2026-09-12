@@ -2,7 +2,7 @@
   "radar": {
     "produtores": [
       {
-        "cliente_id": "12345678000199",
+        "cliente_id": "12345678000195",
         "nome": "Fazenda Boa Vista Ltda.",
         "regiao": "Centro-Oeste",
         "cultura": "soja",
@@ -30,7 +30,7 @@
         "travas_acionadas": []
       },
       {
-        "cliente_id": "98765432000110",
+        "cliente_id": "98765432000198",
         "nome": "Agropecuária Rio Verde S.A.",
         "regiao": "Centro-Oeste",
         "cultura": "algodão",
@@ -58,7 +58,7 @@
         "travas_acionadas": ["recuperacao_judicial", "margem_nao_cobre_exposicao", "historico_pagamento_deteriorado"]
       },
       {
-        "cliente_id": "45678912000133",
+        "cliente_id": "45678912000155",
         "nome": "Sementes do Cerrado Ltda.",
         "regiao": "Nordeste",
         "cultura": "soja",
@@ -86,7 +86,7 @@
         "travas_acionadas": []
       },
       {
-        "cliente_id": "23456789000144",
+        "cliente_id": "23456789000195",
         "nome": "Agro Vale Participações Ltda.",
         "regiao": "Centro-Oeste",
         "cultura": "soja",
@@ -114,7 +114,7 @@
         "travas_acionadas": ["embargo_ambiental_ativo", "margem_nao_cobre_exposicao"]
       },
       {
-        "cliente_id": "34567891000155",
+        "cliente_id": "34567891000184",
         "nome": "Fazenda Serrana do Sul Ltda.",
         "regiao": "Sul",
         "cultura": "trigo",

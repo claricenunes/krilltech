@@ -1,21 +1,21 @@
 {
-  "12345678000199": {
+  "12345678000195": {
     "texto_explicativo": "Este produtor apresenta risco moderado (rating B), impulsionado principalmente pela queda de produtividade projetada para a região Centro-Oeste. A situação cadastral e o histórico de pagamento seguem regulares, e há apenas um processo judicial de menor relevância.",
     "recomendacao": "Manter a exposição atual e monitorar a evolução da safra na próxima janela de acompanhamento."
   },
-  "98765432000110": {
+  "98765432000198": {
     "texto_explicativo": "Este produtor está em recuperação judicial, com 2 processos ativos e histórico de atraso de pagamento acima de 30 dias — o fator jurídico, que tem o maior peso no score, domina o resultado. A queda de produtividade projetada para a região agrava ainda mais o cenário.",
     "recomendacao": "Não ampliar exposição; reavaliar condições de pagamento e acompanhar de perto a situação da recuperação judicial."
   },
-  "45678912000133": {
+  "45678912000155": {
     "texto_explicativo": "Este produtor apresenta risco baixo (rating A). Não há processos judiciais relevantes, embargo ambiental ou pendência cadastral. A queda de produtividade projetada para a região Nordeste é moderada e não compromete a capacidade de pagamento estimada.",
     "recomendacao": "Manter condições atuais; bom candidato para ampliação de limite, se houver demanda."
   },
-  "23456789000144": {
+  "23456789000195": {
     "texto_explicativo": "Este produtor tem um embargo ambiental ativo identificado em área de produção, o que eleva o risco mesmo com situação cadastral e jurídica regulares. A produtividade projetada para a região também está em queda.",
     "recomendacao": "Exigir regularização ambiental antes de qualquer ampliação de limite; monitorar risco operacional e reputacional."
   },
-  "34567891000155": {
+  "34567891000184": {
     "texto_explicativo": "Este produtor apresenta a carteira mais estável entre os monitorados (rating A), com produtividade projetada dentro da média histórica da região Sul e nenhum sinal de deterioração jurídica, ambiental ou cadastral.",
     "recomendacao": "Manter condições atuais; baixa vulnerabilidade a cenários adversos de produtividade."
   }

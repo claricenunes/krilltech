@@ -1,5 +1,6 @@
-import { TriangleAlert } from 'lucide-react'
+import { Download, FileSpreadsheet, TriangleAlert } from 'lucide-react'
 import type { Evidence, Rating, RiskFactor, Trend } from '../../types/risk'
+import { gerarExcelRelatorio, gerarPdfRelatorio } from '../../services/report/exportRelatorio'
 import { RATING_META } from '../../utils/rating'
 import EvidenceCard from './EvidenceCard'
 import RatingBadge from './RatingBadge'
@@ -19,6 +20,10 @@ interface ScreeningResultProps {
   evidences: Evidence[]
   recommendationTitle: string
   recommendationBody: string
+  /** Data/hora de referência do cálculo — quando os dados foram atualizados pela última vez. */
+  atualizadoEm: string
+  /** Limitações do modelo, exibidas para deixar claro o que o score NÃO representa. */
+  limitacoes: string
 }
 
 const STATUS_TONE: Record<Rating, string> = {
@@ -39,15 +44,34 @@ function ScreeningResult({
   evidences,
   recommendationTitle,
   recommendationBody,
+  atualizadoEm,
+  limitacoes,
 }: ScreeningResultProps) {
   const ratingMeta = RATING_META[rating]
+
+  const dadosExportacao = {
+    clientName,
+    document,
+    score,
+    rating,
+    operationalStatus,
+    factors,
+    evidences,
+    recommendationTitle,
+    recommendationBody,
+    atualizadoEm,
+    limitacoes,
+  }
 
   return (
     <div className="flex flex-col gap-6 animate-fade-up">
       <section className="rounded-2xl border border-sage-200/70 bg-white p-5 shadow-softer sm:p-6">
-        <p className="text-xs font-semibold uppercase tracking-wide text-sage-500">
-          Cliente
-        </p>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-sage-500">
+            Cliente
+          </p>
+          <p className="text-xs text-sage-400">Atualizado em: {atualizadoEm}</p>
+        </div>
         <div className="mt-1.5 flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-xl font-semibold text-forest-950">{clientName}</p>
@@ -65,6 +89,25 @@ function ScreeningResult({
           <RiskScore score={score} label="Score de risco" barClasses={ratingMeta.barClasses} />
           <RatingBadge rating={rating} />
           <TrendIndicator {...trend} />
+        </div>
+
+        <div className="mt-6 flex flex-wrap gap-2 border-t border-sage-100 pt-4">
+          <button
+            type="button"
+            onClick={() => gerarPdfRelatorio(dadosExportacao)}
+            className="inline-flex items-center gap-1.5 rounded-full border border-sage-200 px-3.5 py-1.5 text-xs font-semibold text-forest-700 transition-colors hover:border-forest-300 hover:bg-sage-50"
+          >
+            <Download className="h-3.5 w-3.5" strokeWidth={2.2} />
+            Baixar PDF
+          </button>
+          <button
+            type="button"
+            onClick={() => gerarExcelRelatorio(dadosExportacao)}
+            className="inline-flex items-center gap-1.5 rounded-full border border-sage-200 px-3.5 py-1.5 text-xs font-semibold text-forest-700 transition-colors hover:border-forest-300 hover:bg-sage-50"
+          >
+            <FileSpreadsheet className="h-3.5 w-3.5" strokeWidth={2.2} />
+            Baixar Excel (.csv)
+          </button>
         </div>
       </section>
 
@@ -91,6 +134,13 @@ function ScreeningResult({
           </div>
         </section>
       )}
+
+      <section className="rounded-xl border border-dashed border-sage-300 bg-sage-50 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-sage-500">
+          Limitações do modelo
+        </p>
+        <p className="mt-1.5 text-xs text-sage-500">{limitacoes}</p>
+      </section>
     </div>
   )
 }

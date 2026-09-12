@@ -217,7 +217,7 @@ export async function getColetorPorCnpj(cnpj: string): Promise<ColetorEntry> {
   const entrada = coletor[cnpj.replace(/\D/g, '')]
   if (!entrada) {
     throw new KrillApiError(
-      'CNPJ não encontrado na base de demonstração. Use um dos exemplos: 12345678000199, 98765432000110, 45678912000133.',
+      'CNPJ não encontrado na base de demonstração. Use um dos exemplos: 12345678000195, 98765432000198, 45678912000155.',
     )
   }
   return entrada

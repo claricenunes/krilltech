@@ -1,30 +1,30 @@
 {
-  "12345678000199": [
+  "12345678000195": [
     { "data": "2024-03-12", "tipo": "cadastral", "titulo": "Cliente cadastrado", "descricao": "Fazenda Boa Vista Ltda. iniciou relacionamento comercial com a Krill Tech." },
     { "data": "2025-08-04", "tipo": "comercial", "titulo": "Ampliação de limite aprovada", "descricao": "Limite de crédito ampliado para R$ 1.200.000 após histórico de pagamento regular." },
     { "data": "2026-02-18", "tipo": "juridico", "titulo": "Processo judicial identificado", "descricao": "Processo de menor relevância identificado no CNPJ, sem impacto imediato na operação." },
     { "data": "2026-07-01", "tipo": "climatico", "titulo": "Alerta de produtividade", "descricao": "Projeção de queda de 7,7% na produtividade da região Centro-Oeste para a safra atual." },
     { "data": "2026-08-15", "tipo": "score", "titulo": "Score recalculado", "descricao": "Score ajustado de 740 para 690 (rating B) após atualização dos fatores climático e jurídico." }
   ],
-  "98765432000110": [
+  "98765432000198": [
     { "data": "2018-07-22", "tipo": "cadastral", "titulo": "Cliente cadastrado", "descricao": "Agropecuária Rio Verde S.A. iniciou relacionamento comercial com a Krill Tech." },
     { "data": "2025-01-10", "tipo": "financeiro", "titulo": "Atraso de pagamento", "descricao": "Atraso de 46 dias identificado em parcela de crédito concedida a prazo." },
     { "data": "2025-11-20", "tipo": "juridico", "titulo": "Segundo processo judicial", "descricao": "Novo processo judicial distribuído contra a empresa." },
     { "data": "2026-04-05", "tipo": "juridico", "titulo": "Recuperação judicial deferida", "descricao": "Pedido de recuperação judicial da empresa foi deferido pela justiça." },
     { "data": "2026-08-15", "tipo": "score", "titulo": "Score recalculado", "descricao": "Score caiu de 620 para 380 (rating B → D) após a recuperação judicial." }
   ],
-  "45678912000133": [
+  "45678912000155": [
     { "data": "2011-01-30", "tipo": "cadastral", "titulo": "Cliente cadastrado", "descricao": "Sementes do Cerrado Ltda. iniciou relacionamento comercial com a Krill Tech." },
     { "data": "2024-06-12", "tipo": "comercial", "titulo": "Renovação de contrato", "descricao": "Contrato de fornecimento renovado sem alterações de limite." },
     { "data": "2026-08-15", "tipo": "score", "titulo": "Score recalculado", "descricao": "Score mantido em 860 (rating A), carteira estável." }
   ],
-  "23456789000144": [
+  "23456789000195": [
     { "data": "2016-09-05", "tipo": "cadastral", "titulo": "Cliente cadastrado", "descricao": "Agro Vale Participações Ltda. iniciou relacionamento comercial com a Krill Tech." },
     { "data": "2025-05-30", "tipo": "comercial", "titulo": "Ampliação de limite aprovada", "descricao": "Limite de crédito ampliado para R$ 2.000.000." },
     { "data": "2026-03-22", "tipo": "climatico", "titulo": "Embargo ambiental identificado", "descricao": "Área de produção associada ao CNPJ foi embargada pelo IBAMA." },
     { "data": "2026-08-15", "tipo": "score", "titulo": "Score recalculado", "descricao": "Score caiu de 710 para 540 (rating B → C) após o embargo ambiental." }
   ],
-  "34567891000155": [
+  "34567891000184": [
     { "data": "2005-11-18", "tipo": "cadastral", "titulo": "Cliente cadastrado", "descricao": "Fazenda Serrana do Sul Ltda. iniciou relacionamento comercial com a Krill Tech." },
     { "data": "2023-02-14", "tipo": "comercial", "titulo": "Ampliação de limite aprovada", "descricao": "Limite de crédito ampliado para R$ 2.600.000 após 15 anos de relacionamento saudável." },
     { "data": "2026-08-15", "tipo": "score", "titulo": "Score recalculado", "descricao": "Score mantido em 902 (rating A), carteira estável." }
