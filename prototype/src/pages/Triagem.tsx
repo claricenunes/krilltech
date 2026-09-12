@@ -17,10 +17,12 @@ import type { CompanyData } from '../types/company'
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
 const STEPS = [
-  { label: 'Coletando dados cadastrais e jurídicos...', delay: 800 },
-  { label: 'Analisando risco climático da região...', delay: 700 },
-  { label: 'Calculando score de risco...', delay: 500 },
-  { label: 'Gerando relatório explicativo...', delay: 900 },
+  { label: 'Consultando dados cadastrais da Receita Federal...', delay: 900 },
+  { label: 'Consultando histórico judicial do CNJ...', delay: 800 },
+  { label: 'Verificando embargos e dados ambientais do IBAMA...', delay: 800 },
+  { label: 'Cruzando dados de safra e clima da região...', delay: 900 },
+  { label: 'Simulando cenários de risco...', delay: 900 },
+  { label: 'Gerando recomendação...', delay: 800 },
 ]
 
 function delay(ms: number) {
@@ -49,20 +51,29 @@ function Triagem() {
     setCurrentStep(0)
 
     try {
+      // Passos 2 e 3 (CNJ, IBAMA) narram o mesmo dado cadastral já trazido pelo
+      // coletor — o protótipo estático não tem chamadas separadas para essas
+      // fontes, então aqui é só a pausa visual que demonstra a orquestração.
       await delay(STEPS[0].delay)
       const coletor = await getColetorPorCnpj(cnpj)
 
       setCurrentStep(1)
       await delay(STEPS[1].delay)
-      const agroclima = await fetchAgroclima()
-      const clima = agroclima[coletor.regiao]
 
       setCurrentStep(2)
       await delay(STEPS[2].delay)
-      const scoring = await getScoreDetalhado(cnpj)
 
       setCurrentStep(3)
       await delay(STEPS[3].delay)
+      const agroclima = await fetchAgroclima()
+      const clima = agroclima[coletor.regiao]
+
+      setCurrentStep(4)
+      await delay(STEPS[4].delay)
+      const scoring = await getScoreDetalhado(cnpj)
+
+      setCurrentStep(5)
+      await delay(STEPS[5].delay)
       const sintese = await getSintese(cnpj)
 
       setResultado({
@@ -110,11 +121,24 @@ function Triagem() {
         )}
 
         {status === 'loading' && (
-          <div className="rounded-2xl border border-sage-200/70 bg-white p-6 shadow-softer sm:p-8">
-            <p className="text-xs font-semibold uppercase tracking-wide text-sage-500">
-              Pipeline de análise
-            </p>
-            <ol className="mt-4 flex flex-col gap-3">
+          <div className="animate-fade-up rounded-2xl border border-sage-200/70 bg-white p-6 shadow-softer sm:p-8">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-semibold uppercase tracking-wide text-sage-500">
+                Orquestrador Sentinela · agentes em execução
+              </p>
+              <p className="text-xs font-medium tabular-nums text-sage-400">
+                {currentStep + 1}/{STEPS.length}
+              </p>
+            </div>
+
+            <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-sage-100">
+              <div
+                className="h-full rounded-full bg-forest-600 transition-[width] duration-500 ease-out"
+                style={{ width: `${((currentStep + 1) / STEPS.length) * 100}%` }}
+              />
+            </div>
+
+            <ol className="mt-5 flex flex-col gap-3">
               {STEPS.map((step, index) => {
                 const isDone = index < currentStep
                 const isCurrent = index === currentStep
@@ -128,7 +152,7 @@ function Triagem() {
                       <Circle className="h-5 w-5 flex-shrink-0 text-sage-300" strokeWidth={2} />
                     )}
                     <span
-                      className={`text-sm ${
+                      className={`text-sm transition-colors duration-300 ${
                         isCurrent ? 'font-semibold text-forest-950' : isDone ? 'text-forest-700' : 'text-sage-400'
                       }`}
                     >
@@ -150,8 +174,8 @@ function Triagem() {
             <CompanySummary company={resultado.company} />
 
             <div className="rounded-xl border border-dashed border-sage-300 bg-sage-50 px-4 py-2.5 text-xs font-medium text-sage-500">
-              MOCK — demonstração do fluxo de 4 agentes (coleta → risco agroclimático → scoring →
-              síntese). Dados fictícios, pré-calculados para esta demo.
+              MOCK — demonstração do fluxo de agentes (Receita → CNJ → IBAMA → safra/clima →
+              simulação → recomendação). Dados fictícios, pré-calculados para esta demo.
             </div>
 
             <ScreeningResult
@@ -163,8 +187,8 @@ function Triagem() {
               trend={{ direction: 'stable' }}
               factors={resultado.fatores}
               evidences={[]}
-              recommendationTitle="Recomendação do Sentinela Krill"
-              recommendationBody={resultado.recomendacao}
+              recommendationTitle={resultado.recomendacao}
+              recommendationBody="Sugestão de apoio à decisão — a decisão final permanece com o gestor."
             />
 
             <section className="rounded-2xl border border-sage-200/70 bg-white p-5 shadow-softer sm:p-6">

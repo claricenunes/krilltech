@@ -1,6 +1,6 @@
 import { Search } from 'lucide-react'
 import { useState, type ChangeEvent, type FormEvent } from 'react'
-import { formatCnpj, isValidCnpj, normalizeCnpj } from '../../utils/cnpj'
+import { formatCnpj, normalizeCnpj } from '../../utils/cnpj'
 
 interface CnpjInputProps {
   onSubmit: (cnpj: string) => void
@@ -20,8 +20,12 @@ function CnpjInput({ onSubmit, isLoading }: CnpjInputProps) {
     event.preventDefault()
     const digits = normalizeCnpj(value)
 
-    if (!isValidCnpj(digits)) {
-      setError('Informe um CNPJ válido.')
+    // Validação apenas estrutural (14 dígitos) — a base de demonstração usa
+    // CNPJs fictícios sequenciais que não passam no dígito verificador real,
+    // então a checagem matemática (isValidCnpj) ficaria a serviço de uma
+    // API real que não existe mais neste protótipo estático.
+    if (digits.length !== 14) {
+      setError('Informe um CNPJ com 14 dígitos.')
       return
     }
 

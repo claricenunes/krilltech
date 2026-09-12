@@ -22,7 +22,7 @@ export interface PortfolioClient {
   fixedCosts?: number
 }
 
-export type AlertTag = 'deterioracao' | 'juridico' | 'climatico'
+export type AlertTag = 'deterioracao' | 'juridico' | 'climatico' | 'ambiental'
 
 /** Um dos (no máximo 3) alertas prioritários mostrados na Home. */
 export interface PriorityAlert {

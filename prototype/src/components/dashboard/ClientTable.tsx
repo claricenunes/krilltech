@@ -1,16 +1,12 @@
 import { ChevronRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { priorityAlerts } from '../../data/mockAlerts'
 import type { PortfolioClient } from '../../types/portfolio'
-import { ALERT_TAG_META } from '../../utils/alerts'
 import { formatCurrency } from '../../utils/currency'
-import { RATING_META } from '../../utils/rating'
+import { RATING_META, STATUS_META } from '../../utils/rating'
 
 interface ClientTableProps {
   clients: PortfolioClient[]
 }
-
-const alertByClientId = new Map(priorityAlerts.map((alert) => [alert.clientId, alert]))
 
 function ClientTable({ clients }: ClientTableProps) {
   const navigate = useNavigate()
@@ -33,8 +29,7 @@ function ClientTable({ clients }: ClientTableProps) {
           {clients.map((client) => {
             const rating = RATING_META[client.rating]
             const scorePercent = Math.min(100, Math.max(0, (client.score / 1000) * 100))
-            const alert = alertByClientId.get(client.id)
-            const alertMeta = alert ? ALERT_TAG_META[alert.tag] : null
+            const statusMeta = STATUS_META[client.status ?? 'saudavel']
 
             return (
               <tr
@@ -69,17 +64,10 @@ function ClientTable({ clients }: ClientTableProps) {
                 </td>
                 <td className="px-3 py-4 text-sage-600">{formatCurrency(client.exposure)}</td>
                 <td className="px-3 py-4">
-                  {alertMeta ? (
-                    <span className={`inline-flex items-center gap-1.5 rounded-full bg-sage-50 px-2.5 py-1 text-xs font-semibold ${alertMeta.textClasses}`}>
-                      <span className={`h-1.5 w-1.5 rounded-full ${alertMeta.dotClasses}`} />
-                      {alertMeta.label}
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-sage-50 px-2.5 py-1 text-xs font-semibold text-forest-700">
-                      <span className="h-1.5 w-1.5 rounded-full bg-forest-500" />
-                      Saudável
-                    </span>
-                  )}
+                  <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${statusMeta.classes}`}>
+                    <span className={`h-1.5 w-1.5 rounded-full ${statusMeta.dotClasses}`} />
+                    {statusMeta.label}
+                  </span>
                 </td>
                 <td className="px-3 py-4 text-right">
                   <ChevronRight className="ml-auto h-4 w-4 text-sage-300" strokeWidth={2.2} />

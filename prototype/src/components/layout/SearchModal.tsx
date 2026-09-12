@@ -1,7 +1,8 @@
 import { Search, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { mockClients } from '../../data/mockClients'
+import { getProdutores } from '../../services/api/staticData'
+import type { ApiProdutor } from '../../services/api/krillApi'
 
 interface SearchModalProps {
   onClose: () => void
@@ -10,6 +11,11 @@ interface SearchModalProps {
 function SearchModal({ onClose }: SearchModalProps) {
   const navigate = useNavigate()
   const [query, setQuery] = useState('')
+  const [produtores, setProdutores] = useState<ApiProdutor[]>([])
+
+  useEffect(() => {
+    getProdutores().then(setProdutores).catch(() => setProdutores([]))
+  }, [])
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -28,15 +34,14 @@ function SearchModal({ onClose }: SearchModalProps) {
     const normalized = query.trim().toLowerCase()
     if (!normalized) return []
     const normalizedDigits = normalized.replace(/\D/g, '')
-    return mockClients
+    return produtores
       .filter(
-        (client) =>
-          client.name.toLowerCase().includes(normalized) ||
-          (normalizedDigits.length > 0 &&
-            client.document.replace(/\D/g, '').includes(normalizedDigits)),
+        (produtor) =>
+          produtor.nome.toLowerCase().includes(normalized) ||
+          (normalizedDigits.length > 0 && produtor.cliente_id.includes(normalizedDigits)),
       )
       .slice(0, 6)
-  }, [query])
+  }, [produtores, query])
 
   function handleSelectClient(id: string) {
     onClose()
@@ -82,16 +87,16 @@ function SearchModal({ onClose }: SearchModalProps) {
               Nenhum cliente encontrado para "{query}".
             </p>
           ) : (
-            results.map((client) => (
+            results.map((produtor) => (
               <button
-                key={client.id}
+                key={produtor.cliente_id}
                 type="button"
-                onClick={() => handleSelectClient(client.id)}
+                onClick={() => handleSelectClient(produtor.cliente_id)}
                 className="flex w-full flex-col items-start px-5 py-3 text-left transition-colors hover:bg-sage-50"
               >
-                <span className="text-sm font-medium text-forest-950">{client.name}</span>
+                <span className="text-sm font-medium text-forest-950">{produtor.nome}</span>
                 <span className="text-xs text-sage-500">
-                  {client.document} · {client.state}
+                  {produtor.cliente_id} · {produtor.regiao}
                 </span>
               </button>
             ))

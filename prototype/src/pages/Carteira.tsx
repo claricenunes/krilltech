@@ -1,9 +1,11 @@
 import { Filter, Loader2 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import ClientTable from '../components/dashboard/ClientTable'
+import RiskExposureRadar from '../components/charts/RiskExposureRadar'
 import PageShell from '../components/layout/PageShell'
 import { getProdutores, getRanking, KrillApiError } from '../services/api/staticData'
 import { produtorAndRankingToPortfolioClient } from '../services/api/mappers'
+import type { ApiProdutor } from '../services/api/krillApi'
 import type { ClientStatus, PortfolioClient } from '../types/portfolio'
 import type { Rating } from '../types/risk'
 import { STATUS_META } from '../utils/rating'
@@ -19,6 +21,7 @@ const STATUSES: Array<'Todos' | ClientStatus> = [
 
 function Carteira() {
   const [clients, setClients] = useState<PortfolioClient[]>([])
+  const [produtores, setProdutores] = useState<ApiProdutor[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -45,6 +48,7 @@ function Carteira() {
           rankingResponse.ranking.map((entry) => [entry.cliente_id, entry]),
         )
 
+        setProdutores(produtores)
         setClients(
           produtores.map((produtor) =>
             produtorAndRankingToPortfolioClient(produtor, rankingById.get(produtor.cliente_id)),
@@ -83,11 +87,31 @@ function Carteira() {
     })
   }, [clients, region, rating, status])
 
+  const filteredProdutores = useMemo(() => {
+    const filteredIds = new Set(filtered.map((c) => c.id))
+    return produtores.filter((p) => filteredIds.has(p.cliente_id))
+  }, [produtores, filtered])
+
   return (
     <PageShell
       title="Carteira"
       subtitle="Todos os clientes monitorados pelo KrillRadar, com filtros por região, rating e status."
     >
+      {!loading && !error && filteredProdutores.length > 0 && (
+        <section className="mb-6 rounded-2xl border border-sage-200/70 bg-white p-5 shadow-softer sm:p-6">
+          <h3 className="text-base font-semibold text-forest-950">
+            Radar de risco x exposição
+          </h3>
+          <p className="mt-1 text-sm text-sage-600">
+            Quem está no canto inferior esquerdo é quem mais pode fazer a KRILLTECH perder
+            dinheiro se o cenário piorar: score baixo e exposição alta ao mesmo tempo.
+          </p>
+          <div className="mt-5">
+            <RiskExposureRadar produtores={filteredProdutores} />
+          </div>
+        </section>
+      )}
+
       <section className="rounded-2xl border border-sage-200/70 bg-white p-5 shadow-softer sm:p-6">
         <div className="flex flex-wrap items-center gap-3">
           <span className="flex items-center gap-1.5 text-sm font-medium text-forest-800">
