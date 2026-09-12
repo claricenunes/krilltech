@@ -1,6 +1,5 @@
-import { Download, FileSpreadsheet, TriangleAlert } from 'lucide-react'
+import { TriangleAlert } from 'lucide-react'
 import type { Evidence, Rating, RiskFactor, Trend } from '../../types/risk'
-import { gerarExcelRelatorio, gerarPdfRelatorio } from '../../services/report/exportRelatorio'
 import { RATING_META } from '../../utils/rating'
 import EvidenceCard from './EvidenceCard'
 import RatingBadge from './RatingBadge'
@@ -49,20 +48,6 @@ function ScreeningResult({
 }: ScreeningResultProps) {
   const ratingMeta = RATING_META[rating]
 
-  const dadosExportacao = {
-    clientName,
-    document,
-    score,
-    rating,
-    operationalStatus,
-    factors,
-    evidences,
-    recommendationTitle,
-    recommendationBody,
-    atualizadoEm,
-    limitacoes,
-  }
-
   return (
     <div className="flex flex-col gap-6 animate-fade-up">
       <section className="rounded-2xl border border-sage-200/70 bg-white p-5 shadow-softer sm:p-6">
@@ -89,25 +74,6 @@ function ScreeningResult({
           <RiskScore score={score} label="Score de risco" barClasses={ratingMeta.barClasses} />
           <RatingBadge rating={rating} />
           <TrendIndicator {...trend} />
-        </div>
-
-        <div className="mt-6 flex flex-wrap gap-2 border-t border-sage-100 pt-4">
-          <button
-            type="button"
-            onClick={() => gerarPdfRelatorio(dadosExportacao)}
-            className="inline-flex items-center gap-1.5 rounded-full border border-sage-200 px-3.5 py-1.5 text-xs font-semibold text-forest-700 transition-colors hover:border-forest-300 hover:bg-sage-50"
-          >
-            <Download className="h-3.5 w-3.5" strokeWidth={2.2} />
-            Baixar PDF
-          </button>
-          <button
-            type="button"
-            onClick={() => gerarExcelRelatorio(dadosExportacao)}
-            className="inline-flex items-center gap-1.5 rounded-full border border-sage-200 px-3.5 py-1.5 text-xs font-semibold text-forest-700 transition-colors hover:border-forest-300 hover:bg-sage-50"
-          >
-            <FileSpreadsheet className="h-3.5 w-3.5" strokeWidth={2.2} />
-            Baixar Excel (.csv)
-          </button>
         </div>
       </section>
 

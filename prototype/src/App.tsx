@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Carteira from './pages/Carteira'
 import Dashboard from './pages/Dashboard'
@@ -5,7 +6,22 @@ import Produtor from './pages/Produtor'
 import Relatorios from './pages/Relatorios'
 import Triagem from './pages/Triagem'
 
+const SPLASH_MIN_VISIBLE_MS = 500
+const SPLASH_FADE_MS = 400
+
 function App() {
+  useEffect(() => {
+    const splash = document.getElementById('splash')
+    if (!splash) return
+
+    const hideTimer = setTimeout(() => {
+      splash.classList.add('splash-hide')
+      setTimeout(() => splash.remove(), SPLASH_FADE_MS)
+    }, SPLASH_MIN_VISIBLE_MS)
+
+    return () => clearTimeout(hideTimer)
+  }, [])
+
   return (
     <BrowserRouter>
       <Routes>

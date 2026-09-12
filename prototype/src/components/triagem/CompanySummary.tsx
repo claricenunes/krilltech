@@ -1,11 +1,41 @@
+import { MapPin } from 'lucide-react'
+import regiaoPhoto from '../../fundo.avif'
 import type { CompanyData } from '../../types/company'
 import { formatCnpj } from '../../utils/cnpj'
 
-function CompanySummary({ company }: { company: CompanyData }) {
+interface CompanySummaryProps {
+  company: CompanyData
+  cultura?: string
+  regiao?: string
+}
+
+function CompanySummary({ company, cultura, regiao }: CompanySummaryProps) {
   const location = [company.municipio, company.uf].filter(Boolean).join(' / ')
 
   return (
-    <div className="rounded-2xl border border-sage-200/70 bg-white p-6 shadow-softer animate-fade-up">
+    <div className="overflow-hidden rounded-2xl border border-sage-200/70 bg-white shadow-softer animate-fade-up">
+      {location && (
+        <div className="relative h-36 w-full sm:h-44">
+          <img src={regiaoPhoto} alt="" className="h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-forest-950/85 via-forest-950/20 to-transparent" />
+          <span className="absolute right-3 top-3 rounded-full bg-forest-950/50 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide text-forest-100">
+            Imagem ilustrativa da região
+          </span>
+          <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
+            <p className="flex items-center gap-1.5 text-sm font-semibold text-white">
+              <MapPin className="h-4 w-4 flex-shrink-0" strokeWidth={2.4} />
+              {location}
+            </p>
+            {(cultura || regiao) && (
+              <p className="mt-0.5 text-xs text-forest-100/80">
+                {[cultura && `Cultura: ${cultura}`, regiao].filter(Boolean).join(' · ')}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      <div className="p-6">
       <p className="text-lg font-semibold text-forest-950">
         {company.razaoSocial}
       </p>
@@ -62,6 +92,7 @@ function CompanySummary({ company }: { company: CompanyData }) {
 
       <div className="mt-4 border-t border-sage-100 pt-4">
         <p className="text-xs text-sage-400">Fonte: {company.fonte ?? 'BrasilAPI'}</p>
+      </div>
       </div>
     </div>
   )

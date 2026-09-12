@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import type { HomeSummary } from '../../types/portfolio'
 import { formatCurrencyCompact } from '../../utils/currency'
 import heroPhoto from '../../fundo.avif'
+import logoMark from '../../logo.png'
 
 function ExposureHero({ summary }: { summary: HomeSummary }) {
   const navigate = useNavigate()
@@ -18,7 +19,20 @@ function ExposureHero({ summary }: { summary: HomeSummary }) {
       </div>
       <div className="absolute inset-0 bg-gradient-to-r from-forest-950 via-forest-950/85 to-forest-950/25" />
 
-      <div className="relative px-8 py-9 sm:px-10 sm:py-10 lg:max-w-xl">
+      <img
+        src={logoMark}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-16 -top-16 h-72 w-72 rotate-[-8deg] object-contain opacity-10 brightness-0 invert sm:h-80 sm:w-80"
+      />
+      <img
+        src={logoMark}
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-16 left-16 hidden h-52 w-52 rotate-[9deg] object-contain opacity-[0.08] brightness-0 invert sm:block"
+      />
+
+      <div className="relative flex min-h-[22rem] flex-col justify-center px-8 py-10 sm:min-h-[26rem] sm:px-10 sm:py-12 lg:max-w-xl">
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-forest-300">
           Resumo da carteira hoje
         </p>

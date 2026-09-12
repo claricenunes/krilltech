@@ -212,6 +212,27 @@ export async function getAlertasDashboard() {
   return fetchAlertas()
 }
 
+export interface StatusMonitoramento {
+  /** Data (ISO) do recálculo de score mais recente entre todos os produtores —
+   * proxy de "quando os agentes rodaram a carteira inteira por último". */
+  ultimaVerificacao: string
+  clientesMonitorados: number
+}
+
+export async function getStatusMonitoramento(): Promise<StatusMonitoramento> {
+  const [timeline, produtores] = await Promise.all([fetchTimeline(), getProdutores()])
+
+  const datasRecalculo = Object.values(timeline)
+    .flat()
+    .filter((evento) => evento.tipo === 'score')
+    .map((evento) => evento.data)
+
+  return {
+    ultimaVerificacao: [...datasRecalculo].sort().at(-1) ?? '',
+    clientesMonitorados: produtores.length,
+  }
+}
+
 export async function getColetorPorCnpj(cnpj: string): Promise<ColetorEntry> {
   const coletor = await fetchColetor()
   const entrada = coletor[cnpj.replace(/\D/g, '')]

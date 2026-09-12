@@ -1,9 +1,10 @@
 import { Bell, ChevronDown, Search, Sun } from 'lucide-react'
-import { useRef, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { priorityAlerts } from '../../data/mockAlerts'
 import daviPhoto from '../../davi.png'
-import { ALERT_TAG_META } from '../../utils/alerts'
+import { getAlertasDashboard, getProdutor } from '../../services/api/staticData'
+import type { PriorityAlert } from '../../types/portfolio'
+import { ALERT_TAG_META, deriveAlertTag } from '../../utils/alerts'
 import { useOnClickOutside } from '../../utils/useOnClickOutside'
 import SearchModal from './SearchModal'
 
@@ -11,9 +12,17 @@ interface TopbarProps {
   title: string
   subtitle: string
   actions?: ReactNode
+  icon?: ReactNode
+  iconBgClassName?: string
 }
 
-function Topbar({ title, subtitle, actions }: TopbarProps) {
+function Topbar({
+  title,
+  subtitle,
+  actions,
+  icon,
+  iconBgClassName = 'bg-alert-amber-100 text-alert-amber-600',
+}: TopbarProps) {
   const navigate = useNavigate()
   const [searchModalOpen, setSearchModalOpen] = useState(false)
   const [notifOpen, setNotifOpen] = useState(false)
@@ -25,12 +34,46 @@ function Topbar({ title, subtitle, actions }: TopbarProps) {
   useOnClickOutside(notifRef, () => setNotifOpen(false))
   useOnClickOutside(userRef, () => setUserOpen(false))
 
+  const [priorityAlerts, setPriorityAlerts] = useState<PriorityAlert[]>([])
+
+  useEffect(() => {
+    let cancelled = false
+
+    getAlertasDashboard()
+      .then(async (dashboard) => {
+        const resolved = await Promise.all(
+          dashboard.alertas.map(async (item) => {
+            const produtor = await getProdutor(item.produtor_id)
+            return {
+              id: item.id,
+              tag: deriveAlertTag(item.titulo, item.nivel),
+              title: item.titulo,
+              clientId: item.produtor_id,
+              clientName: produtor.nome,
+              state: produtor.regiao,
+              description: item.resumo,
+            } satisfies PriorityAlert
+          }),
+        )
+        if (!cancelled) setPriorityAlerts(resolved)
+      })
+      .catch(() => {
+        if (!cancelled) setPriorityAlerts([])
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   return (
     <>
     <header className="flex flex-col gap-4 border-b border-sage-200/70 bg-cream-50/95 px-6 py-5 backdrop-blur lg:flex-row lg:items-center lg:justify-between lg:px-10">
       <div className="flex items-start gap-2.5">
-        <span className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-alert-amber-100 text-alert-amber-600">
-          <Sun className="h-4 w-4" strokeWidth={2.2} />
+        <span
+          className={`mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full ${iconBgClassName}`}
+        >
+          {icon ?? <Sun className="h-4 w-4" strokeWidth={2.2} />}
         </span>
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-forest-950">
@@ -70,6 +113,9 @@ function Topbar({ title, subtitle, actions }: TopbarProps) {
               <p className="px-4 pb-2 pt-1 text-xs font-semibold uppercase tracking-wide text-sage-500">
                 Alertas prioritários
               </p>
+              {priorityAlerts.length === 0 && (
+                <p className="px-4 py-3 text-sm text-sage-400">Nenhum alerta no momento.</p>
+              )}
               {priorityAlerts.map((alert) => {
                 const meta = ALERT_TAG_META[alert.tag]
                 return (

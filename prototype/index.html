@@ -3,10 +3,45 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" as="image" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sentinela Krill</title>
+    <style>
+      #splash {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #0f2417;
+        transition: opacity 0.4s ease;
+      }
+      #splash img {
+        width: 84px;
+        height: 84px;
+        object-fit: contain;
+        animation: splash-pulse 1.4s ease-in-out infinite;
+      }
+      #splash.splash-hide {
+        opacity: 0;
+        pointer-events: none;
+      }
+      @keyframes splash-pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(0.92);
+          opacity: 0.75;
+        }
+      }
+    </style>
   </head>
   <body>
+    <div id="splash"><img src="/logo.png" alt="KrillRadar" /></div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
