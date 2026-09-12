@@ -1,14 +1,20 @@
-import { Loader2 } from 'lucide-react'
+import { ArrowRight, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import RiskExposureRadar from '../components/charts/RiskExposureRadar'
 import ExposureHero from '../components/dashboard/ExposureHero'
 import PriorityAlertCard from '../components/dashboard/PriorityAlertCard'
 import RiskProjection from '../components/dashboard/RiskProjection'
+import Logo from '../components/layout/Logo'
 import PageShell from '../components/layout/PageShell'
+import logoMark from '../logo.png'
+import type { ApiProdutor } from '../services/api/krillApi'
 import { classificacaoToRating } from '../services/api/mappers'
 import { simulateProductivityImpact } from '../services/scoring/simulator'
 import {
   getAlertasDashboard,
   getProdutor,
+  getProdutores,
   getSafra,
   KrillApiError,
 } from '../services/api/staticData'
@@ -27,8 +33,10 @@ interface FeaturedProjection {
 }
 
 function Dashboard() {
+  const navigate = useNavigate()
   const [summary, setSummary] = useState<HomeSummary | null>(null)
   const [alerts, setAlerts] = useState<PriorityAlert[]>([])
+  const [produtores, setProdutores] = useState<ApiProdutor[]>([])
   const [featured, setFeatured] = useState<FeaturedProjection | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -41,7 +49,12 @@ function Dashboard() {
       setError(null)
 
       try {
-        const dashboard = await getAlertasDashboard()
+        const [dashboard, todosProdutores] = await Promise.all([
+          getAlertasDashboard(),
+          getProdutores(),
+        ])
+
+        if (!cancelled) setProdutores(todosProdutores)
 
         const resolved = await Promise.all(
           dashboard.alertas.map(async (item) => {
@@ -122,7 +135,12 @@ function Dashboard() {
 
   if (loading) {
     return (
-      <PageShell title="Exposição da carteira" subtitle="Calculando onde está o dinheiro em risco...">
+      <PageShell
+        title="Exposição da carteira"
+        subtitle="Calculando onde está o dinheiro em risco..."
+        icon={<Logo className="h-5 w-5" />}
+        iconBgClassName="bg-sage-100"
+      >
         <div className="mx-auto flex max-w-4xl items-center justify-center gap-2 rounded-2xl border border-sage-200/70 bg-white p-10 text-sm text-sage-500 shadow-softer">
           <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.2} />
           Consultando os agentes de risco...
@@ -133,7 +151,12 @@ function Dashboard() {
 
   if (error || !summary) {
     return (
-      <PageShell title="Exposição da carteira" subtitle="Não foi possível carregar a exposição da carteira.">
+      <PageShell
+        title="Exposição da carteira"
+        subtitle="Não foi possível carregar a exposição da carteira."
+        icon={<Logo className="h-5 w-5" />}
+        iconBgClassName="bg-sage-100"
+      >
         <div className="mx-auto max-w-4xl rounded-2xl border border-sage-200/70 bg-white p-8 text-center text-sm text-alert-red-600 shadow-softer">
           {error ?? 'Nenhum dado disponível.'}
         </div>
@@ -145,20 +168,72 @@ function Dashboard() {
     <PageShell
       title="Exposição da carteira"
       subtitle="Onde está o dinheiro que merece sua atenção agora."
+      icon={<Logo className="h-5 w-5" />}
+      iconBgClassName="bg-sage-100"
     >
-      <div className="mx-auto flex max-w-4xl flex-col gap-8">
-        <ExposureHero summary={summary} />
+      <div className="relative overflow-hidden">
+        <img
+          src={logoMark}
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-24 -top-16 h-[26rem] w-[26rem] rotate-12 object-contain opacity-[0.05]"
+        />
+        <img
+          src={logoMark}
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-28 top-[38rem] h-[24rem] w-[24rem] -rotate-6 object-contain opacity-[0.045]"
+        />
+        <img
+          src={logoMark}
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-16 bottom-0 h-80 w-80 rotate-6 object-contain opacity-[0.04]"
+        />
 
-        <section>
-          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-sage-500">
-            Alertas prioritários
-          </h3>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            {alerts.map((alert) => (
-              <PriorityAlertCard key={alert.id} alert={alert} />
-            ))}
-          </div>
-        </section>
+        <div className="relative mx-auto flex max-w-6xl flex-col gap-8">
+          <ExposureHero summary={summary} />
+
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          {produtores.length > 0 && (
+            <section className="rounded-2xl border border-sage-200/70 bg-white p-5 shadow-softer sm:p-6">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="max-w-md">
+                  <h3 className="text-base font-semibold text-forest-950">
+                    Radar de risco x exposição
+                  </h3>
+                  <p className="mt-1 text-sm text-sage-600">
+                    Quem está no canto inferior esquerdo é quem mais pode fazer a KRILLTECH
+                    perder dinheiro se o cenário piorar: score baixo e exposição alta ao mesmo
+                    tempo.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => navigate('/carteira')}
+                  className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full border border-sage-200 bg-white px-4 py-2 text-sm font-semibold text-forest-800 shadow-softer transition-all hover:border-forest-300 hover:shadow-soft active:scale-[0.98]"
+                >
+                  Ver carteira completa
+                  <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
+                </button>
+              </div>
+              <div className="mt-5">
+                <RiskExposureRadar produtores={produtores} />
+              </div>
+            </section>
+          )}
+
+          <section>
+            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-sage-500">
+              Alertas prioritários
+            </h3>
+            <div className="grid grid-cols-1 gap-4">
+              {alerts.map((alert) => (
+                <PriorityAlertCard key={alert.id} alert={alert} />
+              ))}
+            </div>
+          </section>
+        </div>
 
         {featured && (
           <section>
@@ -176,6 +251,7 @@ function Dashboard() {
             />
           </section>
         )}
+        </div>
       </div>
     </PageShell>
   )

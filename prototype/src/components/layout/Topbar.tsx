@@ -12,9 +12,17 @@ interface TopbarProps {
   title: string
   subtitle: string
   actions?: ReactNode
+  icon?: ReactNode
+  iconBgClassName?: string
 }
 
-function Topbar({ title, subtitle, actions }: TopbarProps) {
+function Topbar({
+  title,
+  subtitle,
+  actions,
+  icon,
+  iconBgClassName = 'bg-alert-amber-100 text-alert-amber-600',
+}: TopbarProps) {
   const navigate = useNavigate()
   const [searchModalOpen, setSearchModalOpen] = useState(false)
   const [notifOpen, setNotifOpen] = useState(false)
@@ -62,8 +70,10 @@ function Topbar({ title, subtitle, actions }: TopbarProps) {
     <>
     <header className="flex flex-col gap-4 border-b border-sage-200/70 bg-cream-50/95 px-6 py-5 backdrop-blur lg:flex-row lg:items-center lg:justify-between lg:px-10">
       <div className="flex items-start gap-2.5">
-        <span className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-alert-amber-100 text-alert-amber-600">
-          <Sun className="h-4 w-4" strokeWidth={2.2} />
+        <span
+          className={`mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full ${iconBgClassName}`}
+        >
+          {icon ?? <Sun className="h-4 w-4" strokeWidth={2.2} />}
         </span>
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-forest-950">

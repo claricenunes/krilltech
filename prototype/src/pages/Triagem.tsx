@@ -1,28 +1,42 @@
 import { CheckCircle2, Circle, Loader2 } from 'lucide-react'
 import { useState } from 'react'
+import type { ScoreTrendPoint } from '../components/charts/ScoreTrendChart'
+import PageShell from '../components/layout/PageShell'
+import DownloadReportButton from '../components/produtor/DownloadReportButton'
 import CnpjInput from '../components/triagem/CnpjInput'
 import CompanySummary from '../components/triagem/CompanySummary'
-import PageShell from '../components/layout/PageShell'
 import ScreeningResult from '../components/risk/ScreeningResult'
+import type { ApiProdutor } from '../services/api/krillApi'
 import {
   fetchAgroclima,
   getColetorPorCnpj,
+  getProdutor,
+  getSafra,
   getScoreDetalhado,
   getSintese,
+  getTimelineDoProdutor,
   KrillApiError,
   type FatorScoring,
+  type TimelineEvento,
 } from '../services/api/staticData'
+import { calculateRating, simulateProductivityImpact } from '../services/scoring/simulator'
 import type { CompanyData } from '../types/company'
+
+/** Extrai "de X para Y" do texto do evento de recálculo de score, quando presente. */
+function parsePreviousScore(descricao: string, currentScore: number): number {
+  const match = descricao.match(/de (\d+) para (\d+)/)
+  return match ? Number(match[1]) : currentScore
+}
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
 const STEPS = [
-  { label: 'Consultando dados cadastrais da Receita Federal...', delay: 900 },
-  { label: 'Consultando histórico judicial do CNJ...', delay: 800 },
-  { label: 'Verificando embargos e dados ambientais do IBAMA...', delay: 800 },
-  { label: 'Cruzando dados de safra e clima da região...', delay: 900 },
-  { label: 'Simulando cenários de risco...', delay: 900 },
-  { label: 'Gerando recomendação...', delay: 800 },
+  { label: 'Consultando dados cadastrais da Receita Federal...', delay: 550 },
+  { label: 'Consultando histórico judicial do CNJ...', delay: 500 },
+  { label: 'Verificando embargos e dados ambientais do IBAMA...', delay: 500 },
+  { label: 'Cruzando dados de safra e clima da região...', delay: 550 },
+  { label: 'Simulando cenários de risco...', delay: 550 },
+  { label: 'Gerando recomendação...', delay: 500 },
 ]
 
 function delay(ms: number) {
@@ -31,11 +45,14 @@ function delay(ms: number) {
 
 interface TriagemResultado {
   company: CompanyData
+  produtor: ApiProdutor
   score: number
   rating: 'A' | 'B' | 'C' | 'D'
   fatores: FatorScoring[]
   recomendacao: string
   textoExplicativo: string
+  trendPoints: ScoreTrendPoint[]
+  timeline: TimelineEvento[]
 }
 
 function Triagem() {
@@ -74,7 +91,24 @@ function Triagem() {
 
       setCurrentStep(5)
       await delay(STEPS[5].delay)
-      const sintese = await getSintese(cnpj)
+      const [sintese, produtor, timeline] = await Promise.all([
+        getSintese(cnpj),
+        getProdutor(cnpj),
+        getTimelineDoProdutor(cnpj),
+      ])
+
+      const scoreEvent = timeline.find((evento) => evento.tipo === 'score')
+      const previousScore = scoreEvent
+        ? parsePreviousScore(scoreEvent.descricao, scoring.score)
+        : scoring.score
+
+      const safra = await getSafra(produtor.regiao, produtor.cultura)
+      const projection = simulateProductivityImpact({
+        currentScore: scoring.score,
+        currentRevenue: produtor.receita_esperada,
+        fixedCosts: produtor.custo_total,
+        productivityVariationPercent: safra.variacao_percentual,
+      })
 
       setResultado({
         company: {
@@ -86,6 +120,7 @@ function Triagem() {
           uf: coletor.uf,
           fonte: 'Dados de demonstração (mock)',
         },
+        produtor,
         score: scoring.score,
         rating: scoring.rating,
         fatores: scoring.fatores,
@@ -93,6 +128,17 @@ function Triagem() {
         textoExplicativo: clima
           ? sintese.texto_explicativo
           : `${sintese.texto_explicativo} (Dados climáticos da região ${coletor.regiao} indisponíveis.)`,
+        timeline,
+        trendPoints: [
+          { label: 'Histórico', score: previousScore, rating: calculateRating(previousScore) },
+          { label: 'Atual', score: scoring.score, rating: scoring.rating },
+          {
+            label: 'Projetado',
+            score: projection.projectedScore,
+            rating: projection.projectedRating,
+            projected: true,
+          },
+        ],
       })
       setStatus('success')
     } catch (error) {
@@ -171,7 +217,25 @@ function Triagem() {
 
         {status === 'success' && resultado && (
           <>
-            <CompanySummary company={resultado.company} />
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="text-sm font-semibold text-forest-950">Resultado da triagem</p>
+              <DownloadReportButton
+                produtor={resultado.produtor}
+                score={{ score: resultado.score, rating: resultado.rating, fatores: resultado.fatores }}
+                sintese={{
+                  texto_explicativo: resultado.textoExplicativo,
+                  recomendacao: resultado.recomendacao,
+                }}
+                trendPoints={resultado.trendPoints}
+                timeline={resultado.timeline}
+              />
+            </div>
+
+            <CompanySummary
+              company={resultado.company}
+              cultura={resultado.produtor.cultura}
+              regiao={resultado.produtor.regiao}
+            />
 
             <div className="rounded-xl border border-dashed border-sage-300 bg-sage-50 px-4 py-2.5 text-xs font-medium text-sage-500">
               MOCK — demonstração do fluxo de agentes (Receita → CNJ → IBAMA → safra/clima →
