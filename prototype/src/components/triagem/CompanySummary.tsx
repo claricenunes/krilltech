@@ -3,9 +3,6 @@ import { formatCnpj } from '../../utils/cnpj'
 
 function CompanySummary({ company }: { company: CompanyData }) {
   const location = [company.municipio, company.uf].filter(Boolean).join(' / ')
-  const address = [company.logradouro, company.bairro]
-    .filter(Boolean)
-    .join(', ')
 
   return (
     <div className="rounded-2xl border border-sage-200/70 bg-white p-6 shadow-softer animate-fade-up">
@@ -39,16 +36,32 @@ function CompanySummary({ company }: { company: CompanyData }) {
             <dd>{location}</dd>
           </div>
         )}
-        {address && (
-          <div>
-            <dt className="text-xs text-sage-400">Endereço</dt>
-            <dd>{address}</dd>
+        {company.cnaePrincipal && (
+          <div className="sm:col-span-2">
+            <dt className="text-xs text-sage-400">Atividade principal (CNAE)</dt>
+            <dd>{company.cnaePrincipal}</dd>
           </div>
         )}
       </dl>
 
+      {typeof company.notaCadastral === 'number' && (
+        <div className="mt-4 rounded-xl border border-sage-200/70 bg-cream-25 p-4">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs font-medium uppercase tracking-wide text-sage-500">
+              Nota cadastral
+            </p>
+            <span className="font-display text-xl font-extrabold text-forest-950">
+              {company.notaCadastral}/100
+            </span>
+          </div>
+          {company.justificativaCadastral && (
+            <p className="mt-1.5 text-sm text-sage-600">{company.justificativaCadastral}</p>
+          )}
+        </div>
+      )}
+
       <div className="mt-4 border-t border-sage-100 pt-4">
-        <p className="text-xs text-sage-400">Fonte: BrasilAPI</p>
+        <p className="text-xs text-sage-400">Fonte: {company.fonte ?? 'BrasilAPI'}</p>
       </div>
     </div>
   )

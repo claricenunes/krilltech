@@ -2,6 +2,7 @@ import http from 'node:http'
 import { URL } from 'node:url'
 
 import { BrasilApiError, consultarCnpj } from './brasilapi.mjs'
+import { consultarEmbargo } from './ibama.mjs'
 import {
   calcularRanking,
   calcularScore,
@@ -35,8 +36,8 @@ const openapiSpec = {
     '/cadastro/{cnpj}': {
       get: {
         operationId: 'obter_cadastro_cnpj',
-        summary: 'Consulta cadastral real por CNPJ (BrasilAPI)',
-        description: 'Consulta ao vivo a situação cadastral do CNPJ na BrasilAPI (Receita Federal). Diferente de /produtores, não depende da carteira mockada — funciona para qualquer CNPJ real válido.',
+        summary: 'Consulta cadastral + embargo ambiental reais por CNPJ',
+        description: 'Consulta ao vivo a situação cadastral do CNPJ na BrasilAPI (Receita Federal) e cruza com o snapshot real de embargos ambientais do IBAMA. Diferente de /produtores, não depende da carteira mockada — funciona para qualquer CNPJ real válido.',
         parameters: [
           {
             name: 'cnpj',
@@ -47,10 +48,29 @@ const openapiSpec = {
           }
         ],
         responses: {
-          '200': { description: 'Dados cadastrais reais do CNPJ' },
+          '200': { description: 'Dados cadastrais reais do CNPJ, com embargo ambiental anexado' },
           '400': { description: 'CNPJ inválido' },
           '404': { description: 'CNPJ não encontrado na Receita Federal' },
           '502': { description: 'Falha ao consultar a BrasilAPI' }
+        }
+      }
+    },
+    '/embargo/{cpf_cnpj}': {
+      get: {
+        operationId: 'obter_embargo_ibama',
+        summary: 'Consulta de embargo ambiental (snapshot real do IBAMA)',
+        description: 'Verifica se o CPF/CNPJ informado possui embargo ambiental ativo ou histórico, a partir do snapshot real do dataset de Dados Abertos do IBAMA (Termos de Embargo). Não é uma chamada ao vivo — o snapshot é gerado por api/scripts/build-ibama-index.mjs.',
+        parameters: [
+          {
+            name: 'cpf_cnpj',
+            in: 'path',
+            required: true,
+            description: 'CPF ou CNPJ a consultar, com ou sem pontuação.',
+            schema: { type: 'string' }
+          }
+        ],
+        responses: {
+          '200': { description: 'Resultado da consulta de embargo (pode não ter nenhum registro)' }
         }
       }
     },
@@ -289,7 +309,8 @@ const server = http.createServer(async (req, res) => {
 
       try {
         const cadastro = await consultarCnpj(cnpj)
-        jsonResponse(res, 200, cadastro)
+        const embargo = consultarEmbargo(cnpj)
+        jsonResponse(res, 200, { ...cadastro, embargo_ambiental: embargo })
       } catch (error) {
         if (error instanceof BrasilApiError) {
           const status = /não encontrado/i.test(error.message)
@@ -303,6 +324,13 @@ const server = http.createServer(async (req, res) => {
         throw error
       }
 
+      return
+    }
+
+    if (req.method === 'GET' && /^\/embargo\//.test(url.pathname) && url.pathname !== '/embargo') {
+      const cpfCnpj = url.pathname.split('/').filter(Boolean)[1]
+      const embargo = consultarEmbargo(cpfCnpj)
+      jsonResponse(res, 200, embargo)
       return
     }
 

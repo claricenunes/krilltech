@@ -6,6 +6,22 @@ const API_BASE_URL = 'http://localhost:8000'
 
 export type ApiClassificacao = 'BAIXO' | 'MODERADO' | 'ALTO' | 'CRITICO'
 
+/** Resposta de GET /cadastro/{cnpj} — real e ao vivo, via BrasilAPI. */
+export interface ApiCadastro {
+  cnpj: string
+  razao_social: string
+  nome_fantasia: string | null
+  situacao_cadastral: string
+  natureza_juridica: string
+  data_inicio_atividade: string
+  municipio: string
+  uf: string
+  cnae_principal: string | null
+  nota_cadastral: number
+  justificativa_cadastral: string
+  fonte: string
+}
+
 export interface ApiProdutor {
   cliente_id: string
   nome: string
@@ -126,6 +142,10 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   }
 
   return response.json() as Promise<T>
+}
+
+export function getCadastro(cnpj: string): Promise<ApiCadastro> {
+  return request<ApiCadastro>(`/cadastro/${encodeURIComponent(cnpj)}`)
 }
 
 export function getProdutores(regiao?: string): Promise<ApiProdutor[]> {

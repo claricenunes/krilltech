@@ -6,6 +6,11 @@ watsonx/.env
 # Node
 node_modules/
 
+# Snapshot gerado a partir do dataset aberto do IBAMA (22MB+, regenerar com
+# node api/scripts/build-ibama-index.mjs)
+api/data/ibama_embargos.json
+api/scripts/.ibama-tmp/
+
 # Editor
 .vscode/*
 !.vscode/extensions.json

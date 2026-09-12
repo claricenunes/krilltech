@@ -6,23 +6,32 @@ import ScreeningResult from '../components/risk/ScreeningResult'
 import SimulatorPanel from '../components/simulator/SimulatorPanel'
 import {
   getProdutor,
-  getScore,
+  getScoreDetalhado,
+  getSintese,
+  getTimelineDoProdutor,
   KrillApiError,
-  type ApiProdutor,
-  type ApiScoreResult,
-} from '../services/api/krillApi'
-import {
-  buildRecommendation,
-  classificacaoToRating,
-  classificacaoToStatus,
-  fatorNotaToRiskFactor,
-} from '../services/api/mappers'
+  type FatorScoring,
+  type TimelineEvento,
+} from '../services/api/staticData'
+import type { ApiProdutor } from '../services/api/krillApi'
+import { classificacaoToStatus } from '../services/api/mappers'
 import { STATUS_META } from '../utils/rating'
+
+const TIMELINE_LABELS: Record<TimelineEvento['tipo'], string> = {
+  cadastral: 'Cadastral',
+  comercial: 'Comercial',
+  financeiro: 'Financeiro',
+  juridico: 'Jurídico',
+  climatico: 'Climático',
+  score: 'Score',
+}
 
 function Produtor() {
   const { id } = useParams()
   const [produtor, setProdutor] = useState<ApiProdutor | null>(null)
-  const [score, setScore] = useState<ApiScoreResult | null>(null)
+  const [score, setScore] = useState<{ score: number; rating: 'A' | 'B' | 'C' | 'D'; fatores: FatorScoring[] } | null>(null)
+  const [sintese, setSintese] = useState<{ texto_explicativo: string; recomendacao: string } | null>(null)
+  const [timeline, setTimeline] = useState<TimelineEvento[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -35,14 +44,18 @@ function Produtor() {
       setError(null)
 
       try {
-        const [produtorData, scoreData] = await Promise.all([
+        const [produtorData, scoreData, sinteseData, timelineData] = await Promise.all([
           getProdutor(id as string),
-          getScore(id as string),
+          getScoreDetalhado(id as string),
+          getSintese(id as string),
+          getTimelineDoProdutor(id as string),
         ])
 
         if (cancelled) return
         setProdutor(produtorData)
         setScore(scoreData)
+        setSintese(sinteseData)
+        setTimeline(timelineData)
       } catch (err) {
         if (!cancelled) {
           setProdutor(null)
@@ -50,7 +63,7 @@ function Produtor() {
           setError(
             err instanceof KrillApiError
               ? err.message
-              : 'Não foi possível carregar este produtor na API local.',
+              : 'Não foi possível carregar este produtor.',
           )
         }
       } finally {
@@ -66,7 +79,7 @@ function Produtor() {
 
   if (loading) {
     return (
-      <PageShell title="Carregando..." subtitle="Consultando a API local em http://localhost:8000.">
+      <PageShell title="Carregando..." subtitle="Consultando os dados de demonstração.">
         <div className="flex items-center justify-center gap-2 rounded-2xl border border-sage-200/70 bg-white p-8 text-sm text-sage-500 shadow-softer">
           <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.2} />
           Carregando produtor...
@@ -80,7 +93,7 @@ function Produtor() {
       <PageShell title="Cliente não encontrado" subtitle="Verifique o link acessado.">
         <div className="rounded-2xl border border-sage-200/70 bg-white p-8 text-center shadow-softer">
           <p className="text-sm text-sage-500">
-            {error ?? 'Não encontramos um cliente com este identificador na API local.'}
+            {error ?? 'Não encontramos um cliente com este identificador na carteira demonstrativa.'}
           </p>
           <Link
             to="/carteira"
@@ -94,10 +107,7 @@ function Produtor() {
     )
   }
 
-  const rating = classificacaoToRating(score.classificacao)
-  const status = classificacaoToStatus(score.classificacao)
-  const factors = score.notas_fatores.map(fatorNotaToRiskFactor)
-  const recommendation = buildRecommendation(score.notas_fatores)
+  const status = classificacaoToStatus(produtor.classificacao ?? 'MODERADO')
 
   return (
     <PageShell
@@ -114,27 +124,52 @@ function Produtor() {
         </Link>
 
         <div className="rounded-xl border border-dashed border-sage-300 bg-sage-50 px-4 py-2.5 text-xs font-medium text-sage-500">
-          Dados calculados ao vivo pela API local (http://localhost:8000) — cliente_id:{' '}
-          {produtor.cliente_id}.
+          MOCK — dados de demonstração para {produtor.nome}, sem relação com clientes reais da
+          KRILLTECH. cliente_id: {produtor.cliente_id}.
         </div>
 
         <ScreeningResult
           clientName={produtor.nome}
           document={produtor.cliente_id}
           score={score.score}
-          rating={rating}
+          rating={score.rating}
           operationalStatus={STATUS_META[status].label}
-          trend={{ direction: 'stable', label: 'Tendência histórica não disponível na API local.' }}
-          factors={factors}
+          trend={{ direction: 'stable', label: 'Ver histórico completo na timeline abaixo.' }}
+          factors={score.fatores}
           evidences={[]}
-          recommendationTitle={recommendation.title}
-          recommendationBody={recommendation.body}
+          recommendationTitle="Recomendação do Sentinela Krill"
+          recommendationBody={sintese?.recomendacao ?? ''}
         />
 
+        {sintese && (
+          <section className="rounded-2xl border border-sage-200/70 bg-white p-5 shadow-softer sm:p-6">
+            <h3 className="text-base font-semibold text-forest-950">Explicação do score</h3>
+            <p className="mt-2 text-sm text-sage-600">{sintese.texto_explicativo}</p>
+          </section>
+        )}
+
+        {timeline.length > 0 && (
+          <section className="rounded-2xl border border-sage-200/70 bg-white p-5 shadow-softer sm:p-6">
+            <h3 className="text-base font-semibold text-forest-950">Histórico de eventos</h3>
+            <ol className="mt-4 flex flex-col gap-4">
+              {timeline.map((evento, index) => (
+                <li key={index} className="flex gap-3 border-l-2 border-sage-200 pl-4">
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-sage-400">
+                      {evento.data} · {TIMELINE_LABELS[evento.tipo]}
+                    </p>
+                    <p className="mt-0.5 text-sm font-semibold text-forest-950">{evento.titulo}</p>
+                    <p className="mt-0.5 text-sm text-sage-600">{evento.descricao}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
         <SimulatorPanel
-          clienteId={produtor.cliente_id}
           currentScore={score.score}
-          currentRating={rating}
+          currentRating={score.rating}
           currentRevenue={produtor.receita_esperada}
           fixedCosts={produtor.custo_total}
         />
