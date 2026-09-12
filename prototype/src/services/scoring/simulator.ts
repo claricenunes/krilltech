@@ -7,7 +7,7 @@ import type { SimulationInput, SimulationResult } from '../../types/simulator'
  * simples para o MVP — NÃO é uma calibração estatística feita com
  * histórico real de inadimplência da KRILLTECH.
  */
-export const DEMO_RISK_SENSITIVITY = 4
+export const DEMO_RISK_SENSITIVITY = 11.9
 
 export function calculateProjectedRevenue(
   currentRevenue: number,

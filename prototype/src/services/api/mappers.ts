@@ -115,6 +115,7 @@ export function produtorAndRankingToPortfolioClient(
     status: classificacaoToStatus(classificacao),
     recommendedAction,
     trend: 'stable',
+    exposure: produtor.exposicao,
     annualRevenue: produtor.receita_esperada,
     fixedCosts: produtor.custo_total,
   }

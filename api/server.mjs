@@ -1,6 +1,7 @@
 import http from 'node:http'
 import { URL } from 'node:url'
 
+import { BrasilApiError, consultarCnpj } from './brasilapi.mjs'
 import {
   calcularRanking,
   calcularScore,
@@ -28,6 +29,28 @@ const openapiSpec = {
         description: 'Verifica se a API está em funcionamento.',
         responses: {
           '200': { description: 'Serviço disponível' }
+        }
+      }
+    },
+    '/cadastro/{cnpj}': {
+      get: {
+        operationId: 'obter_cadastro_cnpj',
+        summary: 'Consulta cadastral real por CNPJ (BrasilAPI)',
+        description: 'Consulta ao vivo a situação cadastral do CNPJ na BrasilAPI (Receita Federal). Diferente de /produtores, não depende da carteira mockada — funciona para qualquer CNPJ real válido.',
+        parameters: [
+          {
+            name: 'cnpj',
+            in: 'path',
+            required: true,
+            description: 'CNPJ a consultar, com ou sem pontuação (14 dígitos).',
+            schema: { type: 'string' }
+          }
+        ],
+        responses: {
+          '200': { description: 'Dados cadastrais reais do CNPJ' },
+          '400': { description: 'CNPJ inválido' },
+          '404': { description: 'CNPJ não encontrado na Receita Federal' },
+          '502': { description: 'Falha ao consultar a BrasilAPI' }
         }
       }
     },
@@ -258,6 +281,28 @@ const server = http.createServer(async (req, res) => {
 
     if (req.method === 'GET' && url.pathname === '/openapi.json') {
       jsonResponse(res, 200, openapiSpec)
+      return
+    }
+
+    if (req.method === 'GET' && /^\/cadastro\//.test(url.pathname) && url.pathname !== '/cadastro') {
+      const cnpj = url.pathname.split('/').filter(Boolean)[1]
+
+      try {
+        const cadastro = await consultarCnpj(cnpj)
+        jsonResponse(res, 200, cadastro)
+      } catch (error) {
+        if (error instanceof BrasilApiError) {
+          const status = /não encontrado/i.test(error.message)
+            ? 404
+            : /inválido/i.test(error.message)
+              ? 400
+              : 502
+          jsonResponse(res, status, { erro: error.message })
+          return
+        }
+        throw error
+      }
+
       return
     }
 

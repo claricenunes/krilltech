@@ -4,9 +4,12 @@ import type { RiskFactorKey } from '../../types/risk'
 interface RiskFactorCardProps {
   factorKey: RiskFactorKey
   title: string
-  weight: number
   status: string
   description?: string
+  /** Fatores calculados via API (score-engine): peso em % do score. */
+  weight?: number
+  /** Fatores da Triagem (mock-risk): nome da fonte do dado. */
+  source?: string
 }
 
 const ICONS: Record<RiskFactorKey, typeof Scale> = {
@@ -28,7 +31,7 @@ const STATUS_TONE: Record<string, string> = {
   Saudável: 'text-forest-700 bg-forest-50',
 }
 
-function RiskFactorCard({ factorKey, title, weight, status, description }: RiskFactorCardProps) {
+function RiskFactorCard({ factorKey, title, weight, status, description, source }: RiskFactorCardProps) {
   const Icon = ICONS[factorKey]
   const tone = STATUS_TONE[status] ?? 'text-sage-600 bg-sage-100'
 
@@ -41,7 +44,9 @@ function RiskFactorCard({ factorKey, title, weight, status, description }: RiskF
           </span>
           <p className="text-sm font-semibold text-forest-950">{title}</p>
         </span>
-        <span className="text-xs font-medium text-sage-400">peso {weight}%</span>
+        {typeof weight === 'number' && (
+          <span className="text-xs font-medium text-sage-400">peso {weight}%</span>
+        )}
       </div>
       <span className={`mt-3 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${tone}`}>
         {status}
@@ -49,6 +54,7 @@ function RiskFactorCard({ factorKey, title, weight, status, description }: RiskF
       {description && (
         <p className="mt-2 text-sm text-sage-600">{description}</p>
       )}
+      {source && <p className="mt-2 text-xs text-sage-400">Fonte: {source}</p>}
     </div>
   )
 }

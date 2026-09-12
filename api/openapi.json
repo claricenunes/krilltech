@@ -24,6 +24,38 @@
         }
       }
     },
+    "/cadastro/{cnpj}": {
+      "get": {
+        "operationId": "obter_cadastro_cnpj",
+        "summary": "Consulta cadastral real por CNPJ (BrasilAPI)",
+        "description": "Consulta ao vivo a situação cadastral do CNPJ na BrasilAPI (Receita Federal). Diferente de /produtores, não depende da carteira mockada — funciona para qualquer CNPJ real válido.",
+        "parameters": [
+          {
+            "name": "cnpj",
+            "in": "path",
+            "required": true,
+            "description": "CNPJ a consultar, com ou sem pontuação (14 dígitos).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados cadastrais reais do CNPJ"
+          },
+          "400": {
+            "description": "CNPJ inválido"
+          },
+          "404": {
+            "description": "CNPJ não encontrado na Receita Federal"
+          },
+          "502": {
+            "description": "Falha ao consultar a BrasilAPI"
+          }
+        }
+      }
+    },
     "/produtores": {
       "get": {
         "operationId": "listar_produtores",

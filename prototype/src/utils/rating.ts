@@ -47,13 +47,6 @@ export const RATING_HEX: Record<Rating, string> = {
   D: '#d94a3a',
 }
 
-export function calculateRating(score: number): Rating {
-  if (score >= 800) return 'A'
-  if (score >= 600) return 'B'
-  if (score >= 400) return 'C'
-  return 'D'
-}
-
 interface StatusMeta {
   label: string
   classes: string

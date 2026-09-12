@@ -7,7 +7,7 @@ interface RecommendationCardProps {
 
 function RecommendationCard({ title, body }: RecommendationCardProps) {
   return (
-    <div className="rounded-2xl border border-forest-200 bg-forest-50/60 p-5 sm:p-6">
+    <div className="rounded-2xl border border-forest-200 bg-forest-50/60 p-5 shadow-softer sm:p-6">
       <div className="flex items-center justify-between gap-3">
         <p className="text-xs font-semibold uppercase tracking-wide text-forest-700">
           Recomendação do KrillRadar

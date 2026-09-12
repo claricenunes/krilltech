@@ -38,6 +38,11 @@ function RiskScore({
           style={{ width: `${percent}%` }}
         />
       </div>
+      {!compact && (
+        <p className="mt-1.5 text-xs text-sage-400">
+          Quanto menor o score, maior o risco de inadimplência.
+        </p>
+      )}
     </div>
   )
 }
