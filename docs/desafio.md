@@ -1,1064 +1,434 @@
-# Desafio — Krill Risk Intelligence
+# Desafio — Hackathon PMI-DF 2026
 
-## Visão geral
+## 1. Empresa: KRILLTECH
 
-O desafio do Hackathon PMI & Krill Tech propõe a criação de um sistema inteligente capaz de apoiar a **prevenção de inadimplência e a identificação antecipada de risco de Recuperação Judicial (RJ) e insolvência no agronegócio**.
+A **KRILLTECH** é uma agtech brasileira que surgiu de uma parceria com a **Universidade de Brasília (UnB)** e a **EMBRAPA**.
 
-A Krill Tech identificou uma elevação da inadimplência, pedidos repentinos de Recuperação Judicial e quebras de produtores rurais e agroindústrias entre seus clientes. Quando um cliente entra em RJ ou se torna inadimplente, o fluxo de caixa da empresa é comprometido e a recuperação do capital investido se torna mais lenta e complexa.
+A empresa é focada no desenvolvimento de soluções para uma **agricultura sustentável e de alta produtividade**.
 
-O desafio, portanto, não é simplesmente descobrir quem já está inadimplente. É criar uma forma de **identificar sinais de deterioração antes que o problema se concretize**, permitindo que a Krill Tech tenha tempo para tomar decisões preventivas.
-
-> **O risco não aparece no dia em que o cliente deixa de pagar. Antes dele, existem sinais.**
-
-O sistema deve combinar **due diligence automatizada, triagem cadastral, monitoramento processual e financeiro, análise de risco e Early Warning**, produzindo um relatório padronizado que auxilie o tomador de decisão da Krill Tech.
+Entre seus produtos está o **Arbolin Biogenesis**, apresentado no desafio como um produto único no mercado brasileiro.
 
 ---
 
-# 1. Problema
+## 2. Contexto: o agronegócio em crise
 
-A Krill Tech está exposta ao risco de inadimplência e Recuperação Judicial de produtores rurais e agroindústrias clientes.
+O agronegócio enfrenta um cenário de maior instabilidade e risco financeiro.
 
-O problema central é a **identificação tardia da deterioração financeira e operacional dos clientes**.
+Entre os fatores apresentados no desafio estão:
 
-Um cliente pode apresentar sinais de risco muito antes de deixar de pagar uma obrigação. Esses sinais podem estar distribuídos em diferentes dimensões:
+* Quebras de safra;
+* Eventos relacionados ao **El Niño**;
+* Queda no preço das commodities;
+* Mudanças no cenário de recuperação judicial;
+* **Lei 14.112/20**, que facilitou a Recuperação Judicial (RJ) para produtor rural pessoa física.
 
-* novos processos judiciais;
-* protestos;
-* execuções;
-* aumento do endividamento;
-* problemas fiscais;
-* passivos trabalhistas;
-* irregularidades ambientais;
-* risco climático;
-* queda de produtividade;
-* deterioração das condições de mercado;
-* aumento da exposição financeira da Krill Tech.
+Esse cenário aumenta a exposição das empresas que vendem produtos e insumos para produtores rurais, especialmente quando existe venda a prazo.
 
-Atualmente, essas informações podem estar espalhadas por diferentes fontes, dificultando sua consolidação, interpretação e acompanhamento contínuo.
+---
 
-O resultado é um processo mais **reativo do que preventivo**.
+# 3. A dor da KRILLTECH
 
-### Situação atual
+A KRILLTECH enfrenta três problemas principais:
+
+### 3.1 Aumento da inadimplência e das quebras no agro
+
+Produtores podem enfrentar dificuldades financeiras e deixar de honrar seus compromissos.
+
+### 3.2 Pedidos repentinos de Recuperação Judicial
+
+Uma empresa ou produtor pode apresentar sinais de dificuldade antes de formalizar um pedido de recuperação judicial, mas esses sinais podem não ser identificados com antecedência.
+
+### 3.3 Recuperação de capital lenta e complexa
+
+Quando ocorre inadimplência ou recuperação judicial, a recuperação do capital pode ser demorada e complexa.
+
+Essas três dores estão explicitamente apresentadas como o problema central da KRILLTECH no desafio.
+
+---
+
+# 4. O desafio
+
+## Como podemos ajudar a KRILLTECH a identificar e acompanhar riscos financeiros e processuais de seus clientes antes que uma crise se torne um problema maior?
+
+A solução deve buscar transformar informações disponíveis sobre clientes e produtores em **informação útil para tomada de decisão**.
+
+O foco não deve ser apenas descobrir que um cliente já está inadimplente ou já entrou em recuperação judicial.
+
+A oportunidade está em criar uma forma de:
+
+1. **Identificar riscos antecipadamente;**
+2. **Acompanhar mudanças ao longo do tempo;**
+3. **Organizar as informações relevantes;**
+4. **Priorizar clientes que precisam de atenção;**
+5. **Apoiar decisões comerciais e financeiras da KRILLTECH.**
+
+---
+
+# 5. Objetivo do desafio
+
+O objetivo apresentado pela organização é desenvolver uma solução que contemple:
+
+### 1. Triagem e diligência prévia automatizada
+
+Criar mecanismos para analisar informações de clientes antes de decisões comerciais relevantes.
+
+A solução deve ajudar a identificar possíveis sinais de risco antes que a empresa conceda ou amplie crédito.
+
+### 2. Monitoramento contínuo processual e financeiro
+
+O risco não deve ser analisado apenas uma vez.
+
+A solução deve permitir acompanhar alterações relevantes ao longo do tempo e identificar quando a situação de determinado cliente muda.
+
+### 3. Relatório Padronizado de Risco
+
+Transformar os dados coletados em uma visão padronizada que auxilie a KRILLTECH na tomada de decisão.
+
+O relatório deve facilitar a resposta para perguntas como:
+
+* Qual é o nível de risco deste cliente?
+* Por que ele recebeu essa classificação?
+* Quais sinais contribuíram para o risco?
+* Houve alguma mudança recente?
+* Esse cliente precisa de atenção imediata?
+* Quais clientes devem ser priorizados?
+
+Esses três pontos correspondem ao objetivo oficial apresentado no desafio.
+
+---
+
+# 6. O que a solução precisa resolver
+
+A equipe deve pensar na jornada completa:
 
 ```text
-Sinais de deterioração
-        ↓
-Dados espalhados
-        ↓
-Análise manual
-        ↓
-Problema se agrava
-        ↓
-Inadimplência / RJ
-        ↓
-Ação da empresa
-```
-
-### Situação desejada
-
-```text
-Sinais de deterioração
-        ↓
-Coleta automática
-        ↓
-Cruzamento de dados
-        ↓
-Score + Red Flags
-        ↓
-Early Warning
-        ↓
-Análise e recomendação
-        ↓
-Ação preventiva
-```
-
-O objetivo é transformar uma situação em que a empresa **descobre o problema tarde** em uma situação em que ela **recebe sinais e consegue agir antecipadamente**.
-
----
-
-# 2. Usuário afetado
-
-## Usuário principal
-
-### Tomador de decisão da Krill Tech
-
-O sistema será utilizado principalmente por profissionais responsáveis por:
-
-* análise de crédito;
-* financeiro;
-* gestão de clientes;
-* acompanhamento de parceiros;
-* exposição financeira;
-* cobrança e recuperação.
-
-O desafio estabelece que o relatório de risco deve ser direcionado ao tomador de decisão da Krill Tech.
-
-## Beneficiários indiretos
-
-### Produtores rurais e agroindústrias
-
-A identificação antecipada de deterioração permite que a empresa avalie medidas preventivas antes que a situação chegue à inadimplência ou à Recuperação Judicial.
-
----
-
-# 3. Causa
-
-O risco de inadimplência não possui necessariamente uma única causa.
-
-No agronegócio, diferentes fatores podem se combinar e reduzir a capacidade de pagamento do produtor ou da agroindústria.
-
-## 3.1. Fatores jurídicos
-
-* novas ações judiciais;
-* execuções;
-* protestos;
-* pedidos de falência;
-* Recuperação Judicial.
-
-## 3.2. Fatores financeiros
-
-* aumento do endividamento;
-* redução da capacidade de pagamento;
-* aumento da exposição;
-* redução das margens;
-* problemas de liquidez.
-
-## 3.3. Fatores fiscais e trabalhistas
-
-* dívida ativa;
-* execuções fiscais;
-* passivos trabalhistas;
-* irregularidades em certidões.
-
-## 3.4. Fatores ambientais
-
-* embargos ambientais;
-* irregularidades cadastrais;
-* problemas relacionados à propriedade rural.
-
-## 3.5. Fatores climáticos e produtivos
-
-* seca;
-* excesso de chuva;
-* temperaturas desfavoráveis;
-* risco climático da região;
-* possibilidade de quebra de safra;
-* redução da produtividade.
-
-## 3.6. Fatores de mercado
-
-* queda ou volatilidade dos preços das commodities;
-* aumento dos custos de produção;
-* variações nas condições de mercado.
-
-## 3.7. Fragmentação das informações
-
-O principal problema operacional é que essas informações pertencem a **fontes e dimensões diferentes**.
-
-O analista precisa transformar dados heterogêneos em uma visão única do cliente.
-
-A solução propõe automatizar justamente essa consolidação.
-
----
-
-# 4. Impacto
-
-## Tempo
-
-### Problema
-
-A análise pode exigir consultas, coleta, organização e interpretação de informações provenientes de diferentes fontes.
-
-### Impacto esperado
-
-Redução do tempo necessário para realizar uma análise de risco e atualizar o acompanhamento de um cliente.
-
-### Indicador
-
-**Tempo médio para gerar/atualizar um relatório de risco.**
-
----
-
-## Custo
-
-### Problema
-
-Quando o risco é identificado apenas depois da inadimplência ou RJ, a recuperação do capital pode se tornar demorada e complexa.
-
-### Impacto esperado
-
-Redução da exposição a clientes que apresentam deterioração e aumento da capacidade de atuação preventiva.
-
-### Indicadores
-
-* exposição financeira em clientes classificados como alto risco;
-* perdas evitadas;
-* recuperação de crédito;
-* valor de crédito sob monitoramento.
-
----
-
-## Produtividade
-
-### Problema
-
-Profissionais podem gastar tempo coletando e consolidando informações em vez de concentrar seus esforços na análise e tomada de decisão.
-
-### Impacto esperado
-
-Automatização das etapas repetitivas de coleta, organização, monitoramento e geração de relatórios.
-
-### Indicador
-
-**Horas de trabalho economizadas por análise.**
-
----
-
-## Qualidade
-
-### Problema
-
-A análise de diferentes fontes pode resultar em avaliações menos padronizadas.
-
-### Impacto esperado
-
-Criação de uma metodologia padronizada de avaliação de risco.
-
-### Indicadores
-
-* percentual de análises com dados completos;
-* padronização dos relatórios;
-* quantidade de fatores de risco identificados;
-* rastreabilidade das evidências utilizadas na análise.
-
----
-
-## Outros
-
-### Antecedência
-
-O principal impacto esperado é aumentar o tempo disponível para reação.
-
-A métrica mais importante será:
-
-> **Quantos dias ou meses antes da inadimplência/RJ um sinal relevante foi identificado?**
-
----
-
-# 5. Dados disponíveis
-
-O desafio disponibiliza diferentes fontes públicas que podem ser utilizadas para enriquecer a análise.
-
-## 5.1. Cadastral e societário
-
-### Receita Federal / CNPJ Aberto / Redesim
-
-Dados:
-
-* CNPJ;
-* Quadro de Sócios e Administradores (QSA);
-* capital social;
-* CNAE;
-* filiais;
-* tempo de atividade.
-
-### Objetivo
-
-Identificar características cadastrais e societárias que possam contribuir para a análise do cliente.
-
----
-
-## 5.2. Processual e jurídico
-
-### DataJud / CNJ / Diários de Justiça Eletrônicos
-
-Possíveis dados:
-
-* processos;
-* execuções;
-* protestos;
-* pedidos de falência;
-* Recuperação Judicial.
-
-### Objetivo
-
-Identificar deterioração jurídica e novos eventos relevantes.
-
----
-
-## 5.3. Territorial e ambiental
-
-### SICAR / IBAMA
-
-Possíveis dados:
-
-* propriedade rural;
-* área consolidada;
-* área de plantio;
-* reserva legal;
-* embargos ambientais.
-
-### Objetivo
-
-Avaliar riscos relacionados à propriedade e à atividade rural.
-
----
-
-## 5.4. Fiscal e trabalhista
-
-### PGFN / TST / Caixa
-
-Possíveis dados:
-
-* dívida ativa;
-* execuções fiscais;
-* certidões;
-* passivos trabalhistas;
-* situação do FGTS.
-
-### Objetivo
-
-Identificar passivos que possam indicar deterioração financeira ou operacional.
-
----
-
-## 5.5. Agronômico e climático
-
-### Conab / MAPA — ZARC / INMET
-
-Possíveis dados:
-
-* produtividade média regional;
-* risco climático;
-* precipitação;
-* temperatura;
-* histórico climático.
-
-### Objetivo
-
-Avaliar como condições climáticas e produtivas podem afetar a capacidade de pagamento do cliente.
-
----
-
-## 5.6. Dados internos da Krill Tech
-
-A solução também deve considerar dados privados disponíveis na operação da empresa, quando existentes.
-
-Exemplos:
-
-* histórico de compras;
-* valor contratado;
-* limite de crédito;
-* histórico de pagamentos;
-* atrasos;
-* exposição atual;
-* garantias;
-* operações realizadas;
-* histórico de relacionamento.
-
-Esses dados são especialmente importantes porque permitem combinar **risco externo** com **exposição real da Krill Tech**.
-
----
-
-# 6. Processo atual
-
-O processo atual pode ser representado de forma simplificada:
-
-```text
-1. Cliente
+CLIENTE
    ↓
-2. Coleta de informações
+COLETA DE INFORMAÇÕES
    ↓
-3. Consultas em diferentes fontes
+ANÁLISE / TRIAGEM
    ↓
-4. Organização dos dados
+CLASSIFICAÇÃO DE RISCO
    ↓
-5. Análise pelo responsável
+MONITORAMENTO
    ↓
-6. Avaliação de risco
+IDENTIFICAÇÃO DE MUDANÇAS
    ↓
-7. Decisão de crédito
-   ↓
-8. Acompanhamento
-   ↓
-9. Novo evento ocorre
-   ↓
-10. Nova análise / reação
-```
-
-## Principal deficiência
-
-O acompanhamento pode ser pontual ou depender de alguém perceber que uma informação nova surgiu.
-
-O problema é que um cliente pode se deteriorar gradualmente.
-
-Por isso, a solução deve transformar o processo em um **monitoramento contínuo**.
-
----
-
-# 7. O que pode ser automatizado?
-
-Grande parte das atividades repetitivas pode ser automatizada.
-
-## 7.1. Coleta
-
-O sistema recebe:
-
-> **CNPJ ou CPF**
-
-e inicia a busca das informações disponíveis.
-
----
-
-## 7.2. Integração
-
-Os dados de diferentes fontes são centralizados em uma estrutura única.
-
-```text
-Receita
-   +
-Judiciário
-   +
-Fiscal
-   +
-Ambiental
-   +
-Clima
-   +
-Mercado
-   +
-Dados Krill
-        ↓
-Perfil consolidado
-```
-
----
-
-## 7.3. Detecção de novos eventos
-
-O sistema monitora alterações relevantes.
-
-Exemplos:
-
-* novo processo;
-* novo protesto;
-* alteração cadastral;
-* novo débito;
-* embargo;
-* alteração de indicador climático;
-* deterioração de indicador financeiro.
-
----
-
-## 7.4. Atualização do score
-
-Cada evento relevante pode alterar a avaliação de risco.
-
-Exemplo:
-
-```text
-Score anterior: 824
-
-Novo processo       → -35
-Dívida fiscal       → -42
-Risco climático     → -27
-
-Novo score: 720
-```
-
-Os pesos reais devem ser calibrados com dados históricos.
-
----
-
-## 7.5. Detecção de deterioração
-
-Não analisar apenas o valor atual.
-
-Também analisar:
-
-> **Como o risco está evoluindo?**
-
-Exemplo:
-
-```text
-Janeiro   824
-Fevereiro 790
-Março     710
-Abril     650
-Maio      580
-Junho     490
-```
-
-Mesmo que determinado cliente ainda não esteja inadimplente, uma queda acelerada do score deve gerar atenção.
-
----
-
-## 7.6. Geração de alertas
-
-Quando um evento ou combinação de eventos ultrapassar determinado nível de risco:
-
-> **ALERTA DE DETERIORAÇÃO**
-
-O sistema informa:
-
-* cliente;
-* score atual;
-* variação do score;
-* principais fatores;
-* evidências;
-* nível de risco;
-* recomendação.
-
----
-
-## 7.7. Geração de relatório
-
-O sistema cria automaticamente um relatório padronizado.
-
----
-
-# 8. Onde a IA agrega valor?
-
-A IA deve ser utilizada principalmente para **interpretar, sintetizar e explicar informações**, e não para substituir todos os cálculos determinísticos.
-
-## 8.1. Leitura de documentos
-
-Um agente pode analisar documentos, publicações e certidões para extrair informações relevantes.
-
----
-
-## 8.2. Síntese de informações
-
-Em vez de o analista receber dezenas de resultados:
-
-```text
-Processo A
-Processo B
-Processo C
-Dívida X
-Dívida Y
-Risco climático Z
-...
-```
-
-a IA pode produzir:
-
-> **“O cliente apresentou deterioração jurídica nos últimos meses, com aumento das ações de execução, simultaneamente a um cenário climático desfavorável para sua região produtiva.”**
-
----
-
-## 8.3. Explicação do risco
-
-O sistema não deve apenas mostrar:
-
-> **Score = 580**
-
-Deve explicar:
-
-> **“O score caiu 244 pontos nos últimos cinco meses principalmente devido ao aumento de ocorrências jurídicas, crescimento da exposição financeira e aumento do risco climático regional.”**
-
----
-
-## 8.4. Geração de recomendação
-
-A IA pode transformar os resultados em uma recomendação operacional compreensível:
-
-> **“Recomenda-se reavaliar o limite de crédito e as condições de pagamento, além de solicitar atualização das informações financeiras e garantias.”**
-
-A recomendação deve servir como **apoio à decisão**, não como decisão automática e definitiva.
-
----
-
-## 8.5. Interface conversacional
-
-No futuro, o responsável poderia perguntar:
-
-> “Por que o risco desse cliente aumentou?”
-
-ou:
-
-> “Quais clientes tiveram maior deterioração esta semana?”
-
-ou:
-
-> “Quais clientes apresentam risco elevado e alta exposição para a Krill?”
-
-A IA responderia utilizando os dados estruturados e as evidências disponíveis.
-
----
-
-# 9. Solução proposta
-
-# Krill Risk Intelligence
-
-## Proposta de valor
-
-> **Uma plataforma de inteligência contínua de risco agrofinanceiro que transforma dados dispersos em Score, Red Flags, Early Warning e recomendações para apoiar decisões da Krill Tech.**
-
-A solução possui quatro etapas principais:
-
-```text
-DADOS
-  ↓
-ANÁLISE
-  ↓
 ALERTA
-  ↓
-DECISÃO
+   ↓
+RELATÓRIO
+   ↓
+DECISÃO DA KRILLTECH
 ```
 
----
-
-## 9.1. Etapa 1 — Investigação
-
-O usuário informa o:
-
-> **CNPJ/CPF do cliente**
-
-O sistema realiza a coleta e consolidação das informações disponíveis.
-
-### Resultado
-
-Um **perfil de risco consolidado**.
+A solução ideal deve reduzir o trabalho manual necessário para acompanhar cada cliente individualmente.
 
 ---
 
-# 9.2. Etapa 2 — Motor de risco
+# 7. Perguntas que a solução deve responder
 
-Os dados são processados por um motor de scoring.
+Durante o desenvolvimento, devemos conseguir responder:
 
-O sistema pode avaliar diferentes dimensões:
+### Sobre o cliente
 
-| Dimensão    | Exemplos                                   |
-| ----------- | ------------------------------------------ |
-| Cadastral   | tempo de atividade, alterações societárias |
-| Jurídica    | processos, execuções, protestos, RJ        |
-| Fiscal      | dívida ativa, certidões                    |
-| Trabalhista | passivos e certidões                       |
-| Ambiental   | embargos e situação da propriedade         |
-| Climática   | seca, chuva, temperatura, ZARC             |
-| Produtiva   | produtividade regional                     |
-| Mercado     | preços e condições da commodity            |
-| Financeira  | exposição, pagamentos, endividamento       |
-| Garantias   | tipo e cobertura das garantias             |
+* Quem é o cliente?
+* Qual é sua situação atual?
+* Existem processos relevantes?
+* Existem sinais financeiros ou jurídicos de atenção?
 
----
+### Sobre o risco
 
-# 9.3. Score 0–1000
+* Qual é o nível de risco atual?
+* Quais fatores levaram a essa classificação?
+* O risco está aumentando, diminuindo ou estável?
 
-A solução propõe um score padronizado de:
+### Sobre mudanças
 
-> **0 a 1000**
+* O que mudou desde a última análise?
+* Quando ocorreu a mudança?
+* A mudança é relevante para a KRILLTECH?
 
-Quanto maior o score, menor o risco.
+### Sobre decisão
 
-Exemplo de classificação:
-
-|    Score | Rating | Interpretação           |
-| -------: | :----: | ----------------------- |
-| 850–1000 |    A   | Baixo risco             |
-|  700–849 |    B   | Atenção                 |
-|  500–699 |    C   | Alto risco              |
-|    0–499 |    D   | Crítico / Early Warning |
-
-**Observação:** os intervalos são uma proposta inicial e deverão ser calibrados com dados históricos.
-
-O desafio exige uma nota de 0 a 1000 associada a uma escala de risco, de baixo risco até risco crítico/alerta de RJ.
+* Quais clientes precisam ser analisados primeiro?
+* Quais clientes representam maior risco?
+* Qual ação deveria ser priorizada?
 
 ---
 
-# 9.4. Score não é suficiente
+# 8. Princípio importante
 
-O sistema deve mostrar também a **tendência do risco**.
+A solução **não deve simplesmente dizer que um cliente é "bom" ou "ruim"**.
+
+Ela precisa explicar o **porquê** da classificação.
 
 Exemplo:
 
 ```text
-Cliente A
-Score: 780
-Tendência: estável
+RISCO: ALTO
+
+Motivos:
+- Processo judicial relevante identificado;
+- Aumento de ocorrências recentes;
+- Indicadores financeiros de atenção;
+- Mudança recente no perfil de risco.
+
+Tendência:
+↑ Risco aumentando
+
+Prioridade:
+ALTA
 ```
 
-versus:
+O objetivo é transformar dados em **evidência para decisão**, e não criar uma "caixa-preta".
+
+---
+
+# 9. Possível visão da solução
+
+A solução pode ser estruturada em quatro grandes componentes:
+
+## A. Entrada de dados
+
+Receber informações sobre clientes/produtores.
+
+## B. Motor de análise
+
+Processar os dados e identificar sinais relevantes.
+
+## C. Monitoramento
+
+Verificar continuamente se ocorreram novas informações ou alterações.
+
+## D. Interface de decisão
+
+Apresentar:
+
+* Score/classificação de risco;
+* Motivos;
+* Alertas;
+* Histórico;
+* Prioridades;
+* Relatório padronizado.
+
+---
+
+# 10. Entregáveis obrigatórios
+
+O edital estabelece como entregáveis obrigatórios:
+
+* **Project Model Canvas**, enviado pelo formulário;
+* **Pitch de apresentação para as bancas avaliadoras**.
+
+---
+
+# 11. Entregáveis competitivos
+
+Entre os formatos que podem ser utilizados para tornar a solução competitiva estão:
+
+* Aplicações;
+* Agentes;
+* Códigos;
+* Painéis.
+
+O importante é demonstrar uma solução funcional e coerente com o problema apresentado.
+
+---
+
+# 12. Critérios de avaliação
+
+A banca avaliará a solução considerando cinco dimensões:
+
+| Critério                           |     Peso |
+| ---------------------------------- | -------: |
+| Diagnóstico do Problema & Impacto  |  **25%** |
+| Viabilidade Técnica & Execução     |  **25%** |
+| Arquitetura de Negócios & Custos   |  **20%** |
+| Implementação & Gestão de Mudanças |  **15%** |
+| Pitch de Defesa & Articulação      |  **15%** |
+| **Total**                          | **100%** |
+
+---
+
+# 13. O que isso significa para nossa equipe
+
+## 13.1 Diagnóstico — 25%
+
+Precisamos demonstrar que entendemos a dor real da KRILLTECH.
+
+Não basta apresentar uma tecnologia interessante.
+
+Precisamos mostrar:
 
 ```text
-Cliente B
-Score: 780
-Tendência: ↓ deterioração acelerada
-```
-
-Mesmo score, situações completamente diferentes.
-
-Por isso, o sistema acompanha:
-
-> **Score atual + variação + velocidade de deterioração**
-
----
-
-# 9.5. Red Flags
-
-O sistema identifica eventos considerados relevantes.
-
-### Exemplos
-
-🔴 Pedido de Recuperação Judicial
-🔴 Aumento significativo de protestos
-🔴 Execuções judiciais
-🔴 Crescimento relevante do endividamento
-🔴 Embargo ambiental
-🟠 Aumento de exposição financeira
-🟠 Risco climático elevado
-🟠 Queda de produtividade regional
-🟡 Alterações cadastrais relevantes
-
-Cada alerta deve possuir:
-
-* evento;
-* data;
-* fonte;
-* impacto;
-* nível de severidade.
-
----
-
-# 9.6. Early Warning System
-
-Essa é a principal funcionalidade da solução.
-
-O sistema monitora continuamente os clientes e procura mudanças relevantes.
-
-### Exemplo
-
-```text
-Cliente: Produtor de café
-
-Janeiro
-Score 824
-Situação normal
-
-        ↓
-
-Fevereiro
-Novo processo
-Score 790
-
-        ↓
-
-Março
-Aumento da exposição
-Score 710
-
-        ↓
-
-Abril
-Risco climático elevado
-Score 650
-
-        ↓
-
-Maio
-Novo protesto
-Score 580
-
-        ↓
-
-Junho
-Deterioração acelerada
-Score 490
-
-        ↓
-
-🚨 EARLY WARNING
-```
-
-O objetivo não é afirmar:
-
-> “Este cliente certamente entrará em RJ.”
-
-O objetivo é informar:
-
-> **“Os sinais de deterioração aumentaram significativamente. É necessário reavaliar a exposição.”**
-
----
-
-# 9.7. Relatório de risco
-
-Cada cliente terá um relatório padronizado.
-
-### Exemplo
-
-```text
-KRILL RISK INTELLIGENCE
-RELATÓRIO DE RISCO
-
-Cliente: Produtor X
-Cultura: Café
-
-SCORE
-490 / 1000
-
-RATING
-D — CRÍTICO
-
-TENDÊNCIA
-↓ Deterioração acelerada
-
-PD
-6 meses: elevada
-12 meses: elevada
-24 meses: elevada
-
-RED FLAGS
-🔴 Novo processo de execução
-🔴 Crescimento da exposição
-🟠 Risco climático elevado
-🟠 Queda da produtividade regional
-
-PRINCIPAIS FATORES
-1. Deterioração jurídica
-2. Aumento da exposição financeira
-3. Risco climático
-
-RECOMENDAÇÃO
-Reavaliar limite de crédito e condições
-de pagamento. Atualizar informações
-financeiras e validar garantias.
-
-FONTES
-Receita Federal
-DataJud
-SICAR
-INMET
-Conab
-Dados internos Krill
+PROBLEMA
+   ↓
+CAUSA
+   ↓
+IMPACTO
+   ↓
+SOLUÇÃO
 ```
 
 ---
 
-# 9.8. Decisão operacional
+## 13.2 Viabilidade técnica — 25%
 
-O sistema não deve simplesmente classificar o cliente.
+A solução precisa ser tecnicamente possível.
 
-Ele deve conectar:
+Devemos conseguir explicar:
 
-> **Risco → Exposição → Ação**
-
-Exemplo:
-
-```text
-RISCO ALTO
-     +
-EXPOSIÇÃO ALTA
-     ↓
-PRIORIDADE MÁXIMA
-```
-
-Possíveis ações a serem avaliadas:
-
-* reavaliar limite;
-* revisar condições de pagamento;
-* solicitar documentação atualizada;
-* revisar garantias;
-* aumentar frequência de acompanhamento;
-* encaminhar para análise especializada.
-
-A decisão final continua sendo do responsável.
+* Como os dados entram;
+* Como são processados;
+* Como o risco é calculado;
+* Como o monitoramento funciona;
+* Como os alertas são gerados;
+* Como a informação chega ao usuário.
 
 ---
 
-# 9.9. Arquitetura conceitual
+## 13.3 Negócio e custos — 20%
 
-A arquitetura pode utilizar o ecossistema IBM disponibilizado no desafio.
+Precisamos demonstrar que a solução faz sentido para a KRILLTECH como negócio.
 
-```text
-                    ┌───────────────┐
-                    │ CNPJ / CPF    │
-                    └───────┬───────┘
-                            ↓
-                ┌─────────────────────┐
-                │ Agente Coletor      │
-                │ & Parser            │
-                └──────────┬──────────┘
-                           ↓
-       ┌───────────────────┼───────────────────┐
-       ↓                   ↓                   ↓
-   Jurídico            Agroclima           Financeiro
-       ↓                   ↓                   ↓
-       └───────────────────┼───────────────────┘
-                           ↓
-                 ┌──────────────────┐
-                 │ Motor de Risco   │
-                 │ & Scoring        │
-                 └────────┬─────────┘
-                          ↓
-                ┌────────────────────┐
-                │ Score + Red Flags  │
-                │ + Tendência        │
-                └─────────┬──────────┘
-                          ↓
-                ┌────────────────────┐
-                │ IA Sintetizadora   │
-                └─────────┬──────────┘
-                          ↓
-              ┌─────────────────────────┐
-              │ Relatório + Early       │
-              │ Warning + Recomendação  │
-              └────────────┬────────────┘
-                           ↓
-                    DECISÃO KRILL
-```
+Perguntas importantes:
 
-O desafio apresenta como referência uma arquitetura com agente coletor/parser, agente de risco agroclimático, motor de decisão/scoring e agente sintetizador/gerador de relatórios. A implementação funcional completa não é exigida durante o hackathon.
+* Quanto custa operar?
+* Quanto trabalho manual pode ser reduzido?
+* Qual decisão a solução melhora?
+* Qual prejuízo ela pode ajudar a evitar?
+* Como poderia ser escalada?
 
 ---
 
-# 10. Como medir o resultado?
+## 13.4 Implementação e gestão da mudança — 15%
 
-## Indicadores principais
+Não basta criar um protótipo.
 
-### 1. Tempo de análise
-
-**Métrica:**
-
-> Tempo médio para gerar um relatório de risco.
-
-**Objetivo:**
-
-Reduzir o trabalho operacional.
-
----
-
-### 2. Antecedência do alerta
-
-**Métrica:**
-
-> Tempo entre o primeiro Early Warning e a ocorrência de inadimplência/RJ.
-
-**Objetivo:**
-
-Aumentar a janela de reação da Krill Tech.
-
-### KPI principal do produto
-
-> **Dias de antecedência obtidos para tomada de decisão.**
-
----
-
-### 3. Precisão do modelo
-
-Após a existência de dados históricos:
-
-> Quantos clientes classificados como alto risco realmente apresentaram deterioração?
-
-Possíveis métricas:
-
-* precisão;
-* recall;
-* F1-score;
-* AUC-ROC.
-
----
-
-### 4. Cobertura
-
-> Percentual da carteira monitorada continuamente.
+Precisamos mostrar como a KRILLTECH poderia realmente utilizar a solução no dia a dia.
 
 Exemplo:
 
 ```text
 Antes:
-Análise pontual de clientes
+
+Cliente → análise manual → decisão
+
 
 Depois:
-100% da carteira monitorada
+
+Cliente
+   ↓
+Sistema
+   ↓
+Análise automática
+   ↓
+Score + evidências
+   ↓
+Alerta
+   ↓
+Decisão
 ```
 
 ---
 
-### 5. Qualidade dos alertas
+## 13.5 Pitch — 15%
 
-Medir:
+O pitch precisa ser claro, objetivo e convincente.
 
-* quantidade de falsos positivos;
-* quantidade de sinais relevantes identificados;
-* percentual de alertas com evidências;
-* percentual de alertas considerados úteis pelos analistas.
+O edital estabelece **3 minutos para apresentação** e **1 minuto de feedback de um dos jurados**, sem tréplica do grupo.
 
----
+Portanto, não devemos tentar explicar tudo.
 
-### 6. Impacto financeiro
+O pitch precisa responder rapidamente:
 
-Após implantação:
-
-* redução de perdas;
-* redução da exposição a clientes deteriorados;
-* aumento da recuperação de capital;
-* redução do valor perdido em operações problemáticas.
+1. Qual é o problema?
+2. Por que ele importa?
+3. Qual é a nossa solução?
+4. Como ela funciona?
+5. Qual é o impacto para a KRILLTECH?
+6. Por que nossa solução é viável?
 
 ---
 
-# MVP PARA O HACKATHON
+# 14. Regra de ouro para nossa solução
 
-A solução completa pode evoluir posteriormente, mas o MVP deve demonstrar apenas o fluxo essencial:
+> **Não queremos apenas detectar problemas. Queremos dar à KRILLTECH tempo para agir antes que o problema vire prejuízo.**
 
-```text
-CNPJ
- ↓
-Coleta de dados
- ↓
-Perfil do cliente
- ↓
-Score 0–1000
- ↓
-Red Flags
- ↓
-Evolução do risco
- ↓
-Early Warning
- ↓
-IA explica o risco
- ↓
-Recomendação
-```
-
-## O que precisa aparecer na demonstração
-
-### Tela 1 — Buscar cliente
+A solução deve transformar:
 
 ```text
-CNPJ: 00.000.000/0001-00
-
-[ ANALISAR CLIENTE ]
+DADOS
+  ↓
+INFORMAÇÃO
+  ↓
+RISCO
+  ↓
+ALERTA
+  ↓
+AÇÃO
 ```
 
-### Tela 2 — Visão de risco
+---
 
-```text
-SCORE: 490 / 1000
+# 15. Checklist da equipe
 
-RATING: D — CRÍTICO
+Antes da entrega, devemos conseguir responder "sim" para:
 
-↓ 244 pontos nos últimos 5 meses
-```
+* [ ] Entendemos claramente a dor da KRILLTECH?
+* [ ] Nossa solução resolve os três objetivos do desafio?
+* [ ] Conseguimos explicar de onde vêm os dados?
+* [ ] Conseguimos explicar como o risco é calculado?
+* [ ] O sistema explica o motivo de cada risco?
+* [ ] Existe monitoramento contínuo?
+* [ ] Existem alertas?
+* [ ] Existe uma visão consolidada dos clientes?
+* [ ] Temos algum protótipo funcional?
+* [ ] Conseguimos demonstrar um caso real/simulado?
+* [ ] Sabemos quanto custa operar a solução?
+* [ ] Sabemos qual impacto ela gera para a KRILLTECH?
+* [ ] O Project Model Canvas está preenchido?
+* [ ] O pitch cabe em 3 minutos?
+* [ ] A apresentação deixa claro por que nossa solução é diferente?
 
-### Tela 3 — Por que o score caiu?
+---
 
-```text
-🔴 Processo judicial
-🔴 Aumento da exposição
-🟠 Risco climático
-🟠 Queda de produtividade
-```
+# 16. Resumo do desafio
 
-### Tela 4 — Early Warning
+### Empresa
 
-```text
-🚨 ALERTA DE DETERIORAÇÃO
+**KRILLTECH — Agtech brasileira**
 
-O cliente apresentou deterioração
-acelerada nos últimos meses.
+### Produto citado
 
-Principais fatores:
-• jurídico
-• financei
-```
+**Arbolin Biogenesis**
+
+### Problema
+
+**Aumento da inadimplência, quebras no agro, pedidos repentinos de Recuperação Judicial e dificuldade na recuperação de capital.**
+
+### Objetivo
+
+Criar uma solução de:
+
+**Triagem + Monitoramento + Relatório de Risco**
+
+### Resultado esperado
+
+Ajudar a KRILLTECH a:
+
+**identificar → acompanhar → priorizar → decidir**
+
+### Avaliação
+
+**Diagnóstico + Técnica + Negócio + Implementação + Pitch**
+
+### Pitch
+
+**3 minutos**
+
+---
+
+## Nossa pergunta central
+
+> **Como podemos dar à KRILLTECH uma visão antecipada e explicável do risco de seus clientes, permitindo que ela tome decisões melhores antes que uma inadimplência ou recuperação judicial se torne um grande prejuízo?**
