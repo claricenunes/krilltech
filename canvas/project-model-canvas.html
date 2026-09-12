@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Project Model Canvas — KrillRadar</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --bg:#eef0e3;
+    --sheet:#fbfbf5;
+    --surface:#ffffff;
+    --ink:#1c2417;
+    --ink-soft:#4b5a44;
+    --ink-faint:#77836c;
+    --primary:#2f5233;
+    --primary-dark:#1d3620;
+    --accent:#a8752c;
+    --line:#d3d8c2;
+    --line-strong:#b9c0a4;
+    --shadow: 0 30px 60px -20px rgba(29,54,32,0.35);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0f140d; --sheet:#0f140d; --surface:#161d12;
+      --ink:#e9ece0; --ink-soft:#b7c0a8; --ink-faint:#8b9680;
+      --primary:#86bb82; --primary-dark:#a9d2a4; --accent:#e2b169;
+      --line:#333f2b; --line-strong:#465237;
+      --shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0f140d; --sheet:#0f140d; --surface:#161d12;
+    --ink:#e9ece0; --ink-soft:#b7c0a8; --ink-faint:#8b9680;
+    --primary:#86bb82; --primary-dark:#a9d2a4; --accent:#e2b169;
+    --line:#333f2b; --line-strong:#465237;
+    --shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    padding:24px 16px; display:flex; justify-content:center;
+  }
+  .scroller{
+    width:100%; max-width:1400px; overflow-x:auto;
+    display:flex; justify-content:center; padding-block:4px;
+  }
+  .sheet{
+    width:297mm; height:210mm; flex:0 0 auto;
+    background:var(--sheet); box-shadow:var(--shadow); border-radius:3px;
+    padding:6mm 8mm; display:flex; flex-direction:column; gap:2.5mm;
+  }
+
+  /* ---------- CANVAS: 5 column groups ---------- */
+  .canvas{
+    flex:1;
+    display:grid;
+    grid-template-columns: 1.85fr 1.5fr 3fr 1.75fr 1.7fr;
+    gap:2mm;
+  }
+  .col{ display:flex; flex-direction:column; gap:2mm; min-height:0; }
+
+  .pitch-col{ display:flex; flex-direction:row; gap:1.6mm; }
+  .spine{
+    writing-mode:vertical-rl; transform:rotate(180deg);
+    font-family:'IBM Plex Mono',monospace; font-weight:600;
+    font-size:8.4pt; letter-spacing:0.35em; color:var(--accent);
+    display:flex; align-items:center; justify-content:center;
+    width:5mm; border-right:0.4mm solid var(--line-strong); flex:none;
+  }
+  .pitch-stack{ display:flex; flex-direction:column; gap:2mm; flex:1; min-height:0; }
+
+  .gp-box{
+    background:var(--surface); border:0.4mm solid var(--primary);
+    border-radius:2mm; padding:2.2mm 2.8mm;
+    display:flex; align-items:center; gap:2.2mm; flex:0 0 auto;
+  }
+  .gp-box img{ height:8mm; width:8mm; object-fit:contain; flex:none; }
+  .gp-box .gp-text{ display:flex; flex-direction:column; gap:0.3mm; }
+  .gp-label{
+    font-family:'IBM Plex Mono',monospace; font-size:6.2pt;
+    letter-spacing:0.12em; color:var(--ink-faint); font-weight:600;
+  }
+  .gp-name{
+    font-family:'IBM Plex Serif',serif; font-weight:600;
+    font-size:11pt; color:var(--primary-dark); line-height:1.1;
+  }
+  .gp-meta{ font-size:6.4pt; color:var(--ink-soft); }
+
+  .row3{ display:flex; flex-direction:row; gap:2mm; flex:1.5; min-height:0; }
+
+  .cell{
+    background:var(--surface); border:0.35mm solid var(--line);
+    border-radius:2mm; padding:2.4mm 3mm;
+    display:flex; flex-direction:column; gap:1.1mm;
+    overflow:hidden; position:relative; flex:1; min-height:0;
+  }
+  .cell::before{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:1mm;
+    background:var(--primary); border-radius:2mm 0 0 2mm;
+  }
+  .cell.accent::before{ background:var(--accent); }
+  .cell-head{ display:flex; align-items:center; gap:1.6mm; padding-left:1mm; flex:none; }
+  .cell-head svg{ width:3.6mm; height:3.6mm; flex:none; color:var(--primary); }
+  .cell.accent .cell-head svg{ color:var(--accent); }
+  .cell-title{
+    font-family:'IBM Plex Mono', monospace; font-size:7.2pt; font-weight:600;
+    letter-spacing:0.05em; text-transform:uppercase; color:var(--primary-dark);
+  }
+  .cell.accent .cell-title{ color:var(--accent); }
+  .cell-sub{ font-size:6.2pt; color:var(--ink-faint); font-style:italic; margin-left:auto; }
+  .cell ul{
+    list-style:none; margin:0; padding:0 0 0 1mm;
+    display:flex; flex-direction:column; gap:0.9mm; overflow:hidden;
+  }
+  .cell li{ font-size:7pt; line-height:1.28; color:var(--ink); padding-left:2.5mm; position:relative; }
+  .cell li::before{ content:"–"; position:absolute; left:0; color:var(--primary); font-weight:600; }
+  .cell.accent li::before{ color:var(--accent); }
+  .cell li b{ font-weight:600; color:var(--primary-dark); }
+  .cell.accent li b{ color:var(--accent); }
+  .note{ margin-top:auto; font-size:6.1pt; color:var(--ink-faint); font-style:italic; flex:none; }
+
+  /* ---------- vertical timeline (narrow column) ---------- */
+  .vtimeline{ display:flex; flex-direction:column; gap:0; overflow:hidden; flex:1; min-height:0; }
+  .vt-item{ display:flex; gap:1.6mm; position:relative; padding-bottom:1mm; flex:0 0 auto; }
+  .vt-rail{ display:flex; flex-direction:column; align-items:center; width:2.4mm; flex:none; }
+  .vt-dot{ width:1.8mm; height:1.8mm; border-radius:50%; background:var(--primary); flex:none; }
+  .vt-line{ width:0.35mm; flex:1; background:var(--line-strong); }
+  .vt-item:last-child .vt-line{ display:none; }
+  .vt-body{ display:flex; flex-direction:column; }
+  .vt-phase{ font-family:'IBM Plex Mono',monospace; font-size:5.8pt; color:var(--ink-faint); letter-spacing:0.04em; }
+  .vt-title{ font-size:6.6pt; font-weight:600; color:var(--ink); line-height:1.15; }
+  .vt-when{ font-size:5.9pt; color:var(--accent); font-weight:600; }
+
+  /* ---------- FOOTER ---------- */
+  .footer{
+    display:flex; align-items:center; justify-content:space-between;
+    border-top:0.35mm solid var(--line-strong); padding-top:1.8mm; flex:none;
+  }
+  .footer-brand{
+    font-family:'IBM Plex Serif', serif; font-weight:600; font-size:11pt;
+    color:var(--primary-dark); letter-spacing:0.02em;
+  }
+  .footer-credit{ font-size:6.2pt; color:var(--ink-faint); margin-top:0.4mm; }
+  .footer-right{ font-size:6.4pt; color:var(--ink-faint); text-align:right; }
+
+  @media print{
+    @page{ size:297mm 210mm; margin:0; }
+    html,body{ background:var(--sheet); }
+    body{ padding:0; }
+    .scroller{ padding:0; max-width:none; overflow:visible; }
+    .sheet{ box-shadow:none; border-radius:0; }
+  }
+</style>
+</head>
+<body>
+<div class="scroller">
+<div class="sheet">
+
+  <div class="canvas">
+
+    <!-- COLUNA 1 — PITCH (Justificativa / Objetivo SMART / Benefícios) + GP -->
+    <div class="pitch-col">
+      <div class="spine">PITCH</div>
+      <div class="pitch-stack">
+
+        <div class="gp-box">
+          <img src="assets/logo.png" alt="KrillRadar">
+          <div class="gp-text">
+            <span class="gp-label">GP</span>
+            <span class="gp-name">KrillRadar</span>
+            <span class="gp-meta">Cliente: KRILLTECH · v1.0 · 12/09/2026</span>
+          </div>
+        </div>
+
+        <div class="cell">
+          <div class="cell-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+            <span class="cell-title">Justificativa</span>
+            <span class="cell-sub">Passado</span>
+          </div>
+          <ul>
+            <li>KRILLTECH só percebe deterioração do cliente quando ele já está inadimplente ou em Recuperação Judicial.</li>
+            <li>Análise de risco hoje é <b>manual e fragmentada</b> entre fontes cadastrais, jurídicas, ambientais e climáticas.</li>
+            <li>Sem monitoramento contínuo da carteira — sinais aparecem tarde demais para agir.</li>
+          </ul>
+        </div>
+
+        <div class="cell">
+          <div class="cell-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M21 12h-3M6 12H3"/></svg>
+            <span class="cell-title">Objetivo SMART</span>
+          </div>
+          <ul>
+            <li>Calcular <b>score 0–1000</b> e <b>rating A–D</b> para qualquer CNPJ consultado.</li>
+            <li>Cruzar dados cadastrais, jurídicos, ambientais e agroclimáticos em um relatório único.</li>
+            <li>Entregar simulador de sensibilidade e alerta acionável, com decisão sempre <b>humana</b>.</li>
+          </ul>
+        </div>
+
+        <div class="cell">
+          <div class="cell-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 6h6v6"/></svg>
+            <span class="cell-title">Benefícios</span>
+            <span class="cell-sub">Futuro</span>
+          </div>
+          <ul>
+            <li>Antecipa sinais de inadimplência <b>antes</b> da Recuperação Judicial.</li>
+            <li>Padroniza o critério de análise entre todos os clientes.</li>
+            <li>Reduz o tempo de análise manual da carteira.</li>
+            <li>Toda recomendação vem com evidência rastreável — nunca "caixa-preta".</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- COLUNA 2 — Produto / Requisitos -->
+    <div class="col">
+      <div class="cell" style="flex:1;">
+        <div class="cell-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>
+          <span class="cell-title">Produto</span>
+        </div>
+        <ul>
+          <li><b>KrillRadar</b> — triagem, monitoramento e explicação de risco de crédito no agronegócio.</li>
+          <li>Radar da Carteira com clientes em atenção e exposição vulnerável.</li>
+          <li>Triagem por CNPJ, score 0–1000, rating A–D.</li>
+          <li>Simulador "e se a produtividade cair X%".</li>
+          <li>Relatório Padronizado de Risco + recomendação ao gestor.</li>
+        </ul>
+      </div>
+      <div class="cell" style="flex:1.2;">
+        <div class="cell-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+          <span class="cell-title">Requisitos</span>
+        </div>
+        <ul>
+          <li>Motor de scoring <b>determinístico</b>: jurídico 35%, climático/produtividade 30%, cadastral 20%, ambiental 15%.</li>
+          <li>Integração real com <b>BrasilAPI</b> (cadastro) e <b>IBAMA</b> (embargo).</li>
+          <li>Processo judicial (CNJ/DataJud) curado como snapshot de demonstração.</li>
+          <li>Dados agroclimáticos e de preço via snapshot (CONAB, INMET, CEPEA).</li>
+          <li>LLM traduz as informações dos agentes de IA em explicação — a decisão final é sempre <b>humana</b>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- COLUNA 3 — Stakeholders + Equipe (lado a lado) / Restrições -->
+    <div class="col">
+      <div class="row3">
+        <div class="cell">
+          <div class="cell-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18"/></svg>
+            <span class="cell-title">Stakeholders externos &amp; fatores externos</span>
+          </div>
+          <ul>
+            <li><b>KRILLTECH</b> — cliente/patrocinador.</li>
+            <li><b>Gestores de crédito</b> — usuários do relatório e dos alertas.</li>
+            <li><b>Produtores rurais</b> avaliados — titulares dos dados públicos.</li>
+            <li>Dados: Receita Federal/BrasilAPI, IBAMA, CNJ/DataJud, CONAB, INMET, CEPEA.</li>
+            <li><b>IBM</b> — watsonx Orchestrate para orquestração dos agentes.</li>
+            <li>Fatores externos: estabilidade das APIs públicas; sem busca automática CNPJ→processo; LGPD.</li>
+          </ul>
+        </div>
+        <div class="cell">
+          <div class="cell-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M2.5 20c0-3.3 2.5-6 5.5-6s5.5 2.7 5.5 6M14.5 20c0-2.6 1.8-4.7 4-4.7s4 2.1 4 4.7"/></svg>
+            <span class="cell-title">Equipe</span>
+          </div>
+          <ul>
+            <li><b>Clarice Nunes</b> — Produto e frontend.</li>
+            <li><b>Ellen Fernandes</b> — Dados e prototipação.</li>
+            <li><b>Maria Clara</b> — Integração de IA (LLM) e explicação dos resultados.</li>
+            <li><b>Helena G. Furtado</b> — Gestão do projeto.</li>
+            <li><b>Livia Morais</b> — Custos e modelo de negócio.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="cell" style="flex:1;">
+        <div class="cell-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9" stroke-dasharray="2 2"/><path d="M6 6l12 12M18 6L6 18"/></svg>
+          <span class="cell-title">Restrições</span>
+        </div>
+        <ul>
+          <li>Ciclo de desenvolvimento curto, equipe pequena e multidisciplinar.</li>
+          <li>Sem base financeira real da KRILLTECH — uso de dados sintéticos.</li>
+          <li>Sem API pública de busca automática CNPJ→processo judicial.</li>
+          <li>PGFN, TST/CNDT, CRF-FGTS, MAPA/ZARC e SICAR fora deste ciclo.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- COLUNA 4 — Premissas / Grupo de Entregas -->
+    <div class="col">
+      <div class="cell" style="flex:1;">
+        <div class="cell-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l7 3v5c0 5-3.2 8.2-7 10-3.8-1.8-7-5-7-10V6l7-3z"/><path d="M9.5 12l1.8 1.8 3.2-3.6"/></svg>
+          <span class="cell-title">Premissas</span>
+        </div>
+        <ul>
+          <li>Dados <b>sintéticos e públicos</b> no MVP — KRILLTECH não forneceu base financeira real.</li>
+          <li>Motor de score é um modelo de <b>regras ponderadas</b>, evolutivo para ML com dados históricos.</li>
+          <li>Decisão de crédito é sempre humana; a IA explica, alerta e recomenda.</li>
+          <li>Processo judicial usado é curado manualmente, não há busca automática.</li>
+        </ul>
+      </div>
+      <div class="cell" style="flex:1.15;">
+        <div class="cell-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>
+          <span class="cell-title">Grupo de entregas</span>
+        </div>
+        <ul>
+          <li>Motor de scoring determinístico + triagem por CNPJ com dado cadastral/ambiental real.</li>
+          <li>Drill-down do produtor (fatores e evidências) + simulador de produtividade.</li>
+          <li>Alerta e recomendação estruturados (JSON) + Radar da Carteira demonstrativo.</li>
+          <li>Relatório Padronizado de Risco + Project Model Canvas e levantamento de custos.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- COLUNA 5 — Riscos / Linha do Tempo / Custos -->
+    <div class="col">
+      <div class="cell accent" style="flex:0.85;">
+        <div class="cell-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l10 18H2L12 3z"/><path d="M12 10v4M12 17h.01"/></svg>
+          <span class="cell-title">Riscos</span>
+        </div>
+        <ul>
+          <li>Instabilidade de APIs públicas → cache/fallback com dado salvo.</li>
+          <li>Sem busca automática no CNJ/DataJud → processo curado e transparente.</li>
+          <li>Score percebido como arbitrário → pesos e critérios documentados.</li>
+        </ul>
+        <div class="note">Lista completa em MVP_ANALYSIS.md</div>
+      </div>
+
+      <div class="cell" style="flex:1.6;">
+        <div class="cell-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+          <span class="cell-title">Linha do tempo</span>
+        </div>
+        <div class="vtimeline">
+          <div class="vt-item"><div class="vt-rail"><div class="vt-dot"></div><div class="vt-line"></div></div><div class="vt-body"><span class="vt-phase">MÊS 1</span><span class="vt-title">Piloto interno com o time de crédito</span><span class="vt-when">Validação</span></div></div>
+          <div class="vt-item"><div class="vt-rail"><div class="vt-dot"></div><div class="vt-line"></div></div><div class="vt-body"><span class="vt-phase">MÊS 2</span><span class="vt-title">Ajuste do motor de scoring</span><span class="vt-when">Feedback real</span></div></div>
+          <div class="vt-item"><div class="vt-rail"><div class="vt-dot"></div><div class="vt-line"></div></div><div class="vt-body"><span class="vt-phase">MÊS 3</span><span class="vt-title">Radar da Carteira em uso real</span><span class="vt-when">Portfólio real</span></div></div>
+          <div class="vt-item"><div class="vt-rail"><div class="vt-dot"></div><div class="vt-line"></div></div><div class="vt-body"><span class="vt-phase">MÊS 4</span><span class="vt-title">Mais integrações de dados</span><span class="vt-when">IBAMA · DataJud</span></div></div>
+          <div class="vt-item"><div class="vt-rail"><div class="vt-dot"></div><div class="vt-line"></div></div><div class="vt-body"><span class="vt-phase">MÊS 5</span><span class="vt-title">Treinamento e expansão gradual</span><span class="vt-when">Time comercial</span></div></div>
+          <div class="vt-item"><div class="vt-rail"><div class="vt-dot"></div></div><div class="vt-body"><span class="vt-phase">MÊS 6</span><span class="vt-title">Avaliação e decisão de expansão</span><span class="vt-when">Produção plena</span></div></div>
+        </div>
+      </div>
+
+      <div class="cell accent" style="flex:0.85;">
+        <div class="cell-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v9M9.3 15c0 1.2 1.2 2 2.7 2s2.7-.8 2.7-2c0-2.6-5.4-1.4-5.4-4 0-1.2 1.2-2 2.7-2s2.7.8 2.7 2"/></svg>
+          <span class="cell-title">Custos</span>
+        </div>
+        <ul>
+          <li><b>MVP:</b> baixo custo inicial — fontes públicas, dados sintéticos; custo principal é tempo de equipe.</li>
+          <li><b>Piloto:</b> hospedagem simples, manutenção e treinamento do time.</li>
+          <li><b>Produção:</b> cloud, watsonx Orchestrate, LLM, LGPD e suporte — custo variável.</li>
+        </ul>
+        <div class="note">Detalhamento em docs/custos.md</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div>
+      <div class="footer-brand">Project Model Canvas</div>
+    </div>
+    <div class="footer-right">KrillRadar — proposta de solução para KRILLTECH<br>v1.0 · 12/09/2026</div>
+  </div>
+
+</div>
+</div>
+</body>
+</html>
