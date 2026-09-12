@@ -4,8 +4,11 @@ export interface CompanyData {
   nomeFantasia?: string
   situacaoCadastral?: string
   naturezaJuridica?: string
-  logradouro?: string
-  bairro?: string
   municipio?: string
   uf?: string
+  cnaePrincipal?: string
+  /** Nota cadastral (0-100) calculada pelo nosso backend a partir do dado real da BrasilAPI. */
+  notaCadastral?: number
+  justificativaCadastral?: string
+  fonte?: string
 }

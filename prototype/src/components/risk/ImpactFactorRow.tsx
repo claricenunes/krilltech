@@ -1,4 +1,4 @@
-import { CloudRain, Leaf, Scale, Building2 } from 'lucide-react'
+import { CloudRain, Leaf, Scale, Building2, Wallet } from 'lucide-react'
 import type { ImpactLevel, RiskFactorKey } from '../../types/risk'
 
 interface ImpactFactorRowProps {
@@ -12,6 +12,7 @@ const ICONS: Record<RiskFactorKey, typeof Scale> = {
   judicial: Scale,
   ambiental: Leaf,
   clima: CloudRain,
+  financeiro: Wallet,
 }
 
 const IMPACT_META: Record<ImpactLevel, { label: string; tone: string; barClasses: string; width: string }> = {

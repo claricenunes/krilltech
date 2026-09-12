@@ -1,0 +1,60 @@
+{
+  "pesos": {
+    "judicial": 0.35,
+    "clima": 0.30,
+    "ambiental": 0.15,
+    "cadastral": 0.20
+  },
+  "resultados": {
+    "12345678000199": {
+      "score": 690,
+      "rating": "B",
+      "fatores": [
+        { "factorKey": "judicial", "title": "Situação judicial", "weight": 35, "status": "Atenção", "description": "1 processo judicial identificado, sem recuperação judicial em curso." },
+        { "factorKey": "clima", "title": "Clima e produtividade", "weight": 30, "status": "Risco elevado", "description": "Queda de produtividade projetada de 7,7% na região Centro-Oeste." },
+        { "factorKey": "ambiental", "title": "Ambiental", "weight": 15, "status": "Regular", "description": "Sem embargos ambientais ativos; CAR regular." },
+        { "factorKey": "cadastral", "title": "Cadastral", "weight": 20, "status": "Regular", "description": "Empresa ativa desde 2014, sem pendências cadastrais." }
+      ]
+    },
+    "98765432000110": {
+      "score": 380,
+      "rating": "D",
+      "fatores": [
+        { "factorKey": "judicial", "title": "Situação judicial", "weight": 35, "status": "Risco crítico", "description": "Recuperação judicial em curso e 2 processos ativos." },
+        { "factorKey": "clima", "title": "Clima e produtividade", "weight": 30, "status": "Risco elevado", "description": "Queda de produtividade projetada de 7,7% na região Centro-Oeste." },
+        { "factorKey": "ambiental", "title": "Ambiental", "weight": 15, "status": "Regular", "description": "Sem embargos ambientais ativos; CAR regular." },
+        { "factorKey": "cadastral", "title": "Cadastral", "weight": 20, "status": "Atenção", "description": "Histórico de atraso de pagamento acima de 30 dias." }
+      ]
+    },
+    "45678912000133": {
+      "score": 860,
+      "rating": "A",
+      "fatores": [
+        { "factorKey": "judicial", "title": "Situação judicial", "weight": 35, "status": "Regular", "description": "Nenhum processo judicial relevante identificado." },
+        { "factorKey": "clima", "title": "Clima e produtividade", "weight": 30, "status": "Risco moderado", "description": "Queda de produtividade projetada de 4,9% na região Nordeste." },
+        { "factorKey": "ambiental", "title": "Ambiental", "weight": 15, "status": "Regular", "description": "Sem embargos ambientais ativos; CAR regular." },
+        { "factorKey": "cadastral", "title": "Cadastral", "weight": 20, "status": "Regular", "description": "Empresa ativa desde 2011, histórico de pagamento saudável." }
+      ]
+    },
+    "23456789000144": {
+      "score": 540,
+      "rating": "C",
+      "fatores": [
+        { "factorKey": "judicial", "title": "Situação judicial", "weight": 35, "status": "Regular", "description": "Nenhum processo judicial relevante identificado." },
+        { "factorKey": "clima", "title": "Clima e produtividade", "weight": 30, "status": "Risco elevado", "description": "Queda de produtividade projetada de 7,7% na região Centro-Oeste." },
+        { "factorKey": "ambiental", "title": "Ambiental", "weight": 15, "status": "Risco crítico", "description": "Embargo ambiental ativo identificado em área de produção." },
+        { "factorKey": "cadastral", "title": "Cadastral", "weight": 20, "status": "Regular", "description": "Empresa ativa desde 2016, sem pendências cadastrais." }
+      ]
+    },
+    "34567891000155": {
+      "score": 902,
+      "rating": "A",
+      "fatores": [
+        { "factorKey": "judicial", "title": "Situação judicial", "weight": 35, "status": "Regular", "description": "Nenhum processo judicial relevante identificado." },
+        { "factorKey": "clima", "title": "Clima e produtividade", "weight": 30, "status": "Regular", "description": "Queda de produtividade projetada de 5,7% na região Sul, dentro da média histórica." },
+        { "factorKey": "ambiental", "title": "Ambiental", "weight": 15, "status": "Regular", "description": "Sem embargos ambientais ativos; CAR regular." },
+        { "factorKey": "cadastral", "title": "Cadastral", "weight": 20, "status": "Regular", "description": "Empresa ativa desde 2005, histórico de pagamento saudável." }
+      ]
+    }
+  }
+}

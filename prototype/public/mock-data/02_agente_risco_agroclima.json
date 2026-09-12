@@ -1,0 +1,42 @@
+{
+  "Centro-Oeste": {
+    "produtividade_media_historica": 65,
+    "produtividade_projetada": 60,
+    "variacao_percentual": -7.7,
+    "nivel_risco_climatico": "alto",
+    "preco_commodity": 62,
+    "custo_producao_ha": 1800
+  },
+  "Nordeste": {
+    "produtividade_media_historica": 61,
+    "produtividade_projetada": 58,
+    "variacao_percentual": -4.9,
+    "nivel_risco_climatico": "moderado",
+    "preco_commodity": 66,
+    "custo_producao_ha": 2050
+  },
+  "Sul": {
+    "produtividade_media_historica": 70,
+    "produtividade_projetada": 66,
+    "variacao_percentual": -5.7,
+    "nivel_risco_climatico": "moderado",
+    "preco_commodity": 71,
+    "custo_producao_ha": 2200
+  },
+  "Sudeste": {
+    "produtividade_media_historica": 61,
+    "produtividade_projetada": 57,
+    "variacao_percentual": -6.6,
+    "nivel_risco_climatico": "alto",
+    "preco_commodity": 66,
+    "custo_producao_ha": 2050
+  },
+  "Norte": {
+    "produtividade_media_historica": 72,
+    "produtividade_projetada": 68,
+    "variacao_percentual": -5.6,
+    "nivel_risco_climatico": "moderado",
+    "preco_commodity": 58,
+    "custo_producao_ha": 1800
+  }
+}

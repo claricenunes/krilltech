@@ -1,4 +1,6 @@
-import type { ImpactFactor, Rating } from './risk'
+import type { ImpactFactor, Rating, TrendDirection } from './risk'
+
+export type ClientStatus = 'saudavel' | 'atencao' | 'risco_elevado' | 'critico'
 
 /** Cliente ativo na carteira — o que aparece na lista de Carteira. */
 export interface PortfolioClient {
@@ -11,6 +13,13 @@ export interface PortfolioClient {
   rating: Rating
   /** MOCK — exposição atual em Arbolin Biogenesis concedida a prazo a este cliente. */
   exposure: number
+  /** Campos abaixo são preenchidos pelas telas conectadas à API real (Carteira/Produtor). */
+  region?: string
+  status?: ClientStatus
+  recommendedAction?: string
+  trend?: TrendDirection
+  annualRevenue?: number
+  fixedCosts?: number
 }
 
 export type AlertTag = 'deterioracao' | 'juridico' | 'climatico'

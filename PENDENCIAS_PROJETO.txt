@@ -1,0 +1,35 @@
+﻿SENTINELA KRILL — O QUE FALTA FAZER
+
+1. FAZER O PROJETO RODAR
+[ ] Recuperar os componentes e a tela Radar que estão faltando.
+[ ] Instalar as dependências e corrigir os erros de build.
+
+2. COMPLETAR O FLUXO PRINCIPAL
+[x ] Consultar um cliente pelo CNPJ e carregar seus dados. -> fazendo (maria e ellen)
+[ ] Calcular a nota de risco e explicar os motivos. 
+[ ] Mostrar o relatório do produtor com as evidências.
+[ ] Simular uma queda na produtividade e mostrar o impacto no risco.
+[ ] Gerar alertas e recomendações, mantendo a decisão com o usuário.
+[ ] Exibir a carteira de clientes no Radar.
+[ x] Integrar a IA para explicar os resultados com base nos dados. -> fazendo (maria e ellen)
+
+3. PREPARAR A APRESENTAÇÃO — COMEÇAR DESDE JÁ
+[ ] Preencher o Project Model Canvas.
+[ ] Definir custos, benefícios e plano de implantação.
+[ ] Ajustar o pitch ao que realmente funciona e ensaiar em 3 minutos.
+[ ] Deixar claro quais dados são reais e quais são de demonstração.
+        os reais: vem das APIs - climaticos, mercado 
+
+4. CONFERIR ANTES DE ENTREGAR
+[ ] Testar um caso completo: CNPJ → relatório → simulação → alerta.
+[ ] Conferir o comportamento quando faltam dados ou a consulta falha.
+[ ] Completar a documentação básica e as instruções para rodar.
+[ ] Gravar uma demonstração de backup.
+
+PODE FICAR PARA DEPOIS
+Exportação em PDF, gráficos históricos, filtros avançados, login e banco de dados de produção.
+
+PRONTO PARA APRESENTAR QUANDO:
+O fluxo completo funcionar, o Canvas estiver revisado e o pitch mostrar exatamente o que foi construído.
+
+Base: análise dos arquivos locais em 12/09/2026.
