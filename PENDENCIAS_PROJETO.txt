@@ -5,13 +5,13 @@
 [ ] Instalar as dependências e corrigir os erros de build.
 
 2. COMPLETAR O FLUXO PRINCIPAL
-[ ] Consultar um cliente pelo CNPJ e carregar seus dados. -> fazendo (maria e ellen)
+[x ] Consultar um cliente pelo CNPJ e carregar seus dados. -> fazendo (maria e ellen)
 [ ] Calcular a nota de risco e explicar os motivos. 
 [ ] Mostrar o relatório do produtor com as evidências.
 [ ] Simular uma queda na produtividade e mostrar o impacto no risco.
 [ ] Gerar alertas e recomendações, mantendo a decisão com o usuário.
 [ ] Exibir a carteira de clientes no Radar.
-[ xg] Integrar a IA para explicar os resultados com base nos dados. -> fazendo (maria e ellen)
+[ x] Integrar a IA para explicar os resultados com base nos dados. -> fazendo (maria e ellen)
 
 3. PREPARAR A APRESENTAÇÃO — COMEÇAR DESDE JÁ
 [ ] Preencher o Project Model Canvas.
