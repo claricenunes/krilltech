@@ -1,0 +1,244 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Sentinela Krill API",
+    "version": "1.0.0",
+    "description": "API de risco de crédito agro para a KRILLTECH."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "Servidor local de desenvolvimento"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "health_check",
+        "summary": "Health check",
+        "description": "Verifica se a API está em funcionamento.",
+        "responses": {
+          "200": {
+            "description": "Serviço disponível"
+          }
+        }
+      }
+    },
+    "/produtores": {
+      "get": {
+        "operationId": "listar_produtores",
+        "summary": "Listar produtores",
+        "description": "Lista a carteira de produtores com filtro opcional por região.",
+        "parameters": [
+          {
+            "name": "regiao",
+            "in": "query",
+            "required": false,
+            "description": "Região geográfica para filtrar os produtores.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de produtores"
+          }
+        }
+      }
+    },
+    "/produtores/{cliente_id}": {
+      "get": {
+        "operationId": "obter_produtor",
+        "summary": "Detalhar produtor",
+        "description": "Retorna a exposição e os principais indicadores do produtor informado.",
+        "parameters": [
+          {
+            "name": "cliente_id",
+            "in": "path",
+            "required": true,
+            "description": "Identificador único do produtor.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do produtor"
+          },
+          "404": {
+            "description": "Produtor não encontrado"
+          }
+        }
+      }
+    },
+    "/conformidade/{cliente_id}": {
+      "get": {
+        "operationId": "obter_conformidade",
+        "summary": "Conformidade do produtor",
+        "description": "Retorna o status cadastral, ambiental e jurídico do produtor.",
+        "parameters": [
+          {
+            "name": "cliente_id",
+            "in": "path",
+            "required": true,
+            "description": "Identificador único do produtor.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados de conformidade"
+          },
+          "404": {
+            "description": "Produtor não encontrado"
+          }
+        }
+      }
+    },
+    "/safra/{regiao}": {
+      "get": {
+        "operationId": "obter_safra_regiao",
+        "summary": "Dados de safra por região",
+        "description": "Retorna indicadores históricos e projetados de produtividade e clima da região.",
+        "parameters": [
+          {
+            "name": "regiao",
+            "in": "path",
+            "required": true,
+            "description": "Região para consulta de safra e clima.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cultura",
+            "in": "query",
+            "required": false,
+            "description": "Cultura agrícola a ser filtrada para a região.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados da safra"
+          },
+          "404": {
+            "description": "Região ou cultura não encontrada"
+          }
+        }
+      }
+    },
+    "/simulacao": {
+      "post": {
+        "operationId": "simular_cenario",
+        "summary": "Simular cenário de produtividade",
+        "description": "Calcula a margem e a cobertura da exposição para uma queda percentual de produtividade.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "cliente_id",
+                  "queda_produtividade_percentual"
+                ],
+                "properties": {
+                  "cliente_id": {
+                    "type": "string",
+                    "description": "Identificador do produtor a ser simulado."
+                  },
+                  "queda_produtividade_percentual": {
+                    "type": "number",
+                    "description": "Queda percentual de produtividade esperada."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resultado da simulação"
+          },
+          "400": {
+            "description": "Dados incompletos ou inválidos"
+          }
+        }
+      }
+    },
+    "/score/{cliente_id}": {
+      "get": {
+        "operationId": "obter_score",
+        "summary": "Score do produtor",
+        "description": "Retorna o score determinístico de 0 a 1000, os fatores e as travas aplicadas.",
+        "parameters": [
+          {
+            "name": "cliente_id",
+            "in": "path",
+            "required": true,
+            "description": "Identificador único do produtor.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "queda_produtividade_percentual",
+            "in": "query",
+            "required": false,
+            "description": "Queda percentual de produtividade utilizada no cálculo do clima e do score.",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Score do produtor"
+          },
+          "404": {
+            "description": "Produtor não encontrado"
+          }
+        }
+      }
+    },
+    "/ranking": {
+      "get": {
+        "operationId": "obter_ranking",
+        "summary": "Ranking de risco",
+        "description": "Lista os clientes ordenados do pior score para o melhor, com vulnerabilidade e exposição total em risco.",
+        "parameters": [
+          {
+            "name": "regiao",
+            "in": "query",
+            "required": false,
+            "description": "Região para filtrar a carteira analisada.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "queda_produtividade_percentual",
+            "in": "query",
+            "required": false,
+            "description": "Queda percentual de produtividade aplicada na simulação de risco.",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ranking da carteira"
+          }
+        }
+      }
+    }
+  }
+}

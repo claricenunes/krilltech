@@ -1,4 +1,4 @@
-import { CloudRain, Leaf, Scale, Wallet } from 'lucide-react'
+import { CloudRain, FileCheck2, Leaf, Scale, Wallet } from 'lucide-react'
 import type { RiskFactorKey } from '../../types/risk'
 
 interface RiskFactorCardProps {
@@ -14,6 +14,7 @@ const ICONS: Record<RiskFactorKey, typeof Scale> = {
   ambiental: Leaf,
   clima: CloudRain,
   financeiro: Wallet,
+  cadastral: FileCheck2,
 }
 
 const STATUS_TONE: Record<string, string> = {

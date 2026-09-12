@@ -15,7 +15,7 @@ export interface Trend {
   label?: string
 }
 
-export type RiskFactorKey = 'judicial' | 'ambiental' | 'clima' | 'financeiro'
+export type RiskFactorKey = 'judicial' | 'ambiental' | 'clima' | 'financeiro' | 'cadastral'
 
 export interface RiskFactor {
   factorKey: RiskFactorKey

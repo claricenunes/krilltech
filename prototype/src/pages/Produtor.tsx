@@ -1,28 +1,86 @@
-import { ArrowLeft } from 'lucide-react'
-import { useMemo } from 'react'
+import { ArrowLeft, Loader2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import PageShell from '../components/layout/PageShell'
 import ScreeningResult from '../components/risk/ScreeningResult'
 import SimulatorPanel from '../components/simulator/SimulatorPanel'
-import { getClientById } from '../data/mockClients'
-import { buildRiskReportForRating } from '../data/mock-risk'
+import {
+  getProdutor,
+  getScore,
+  KrillApiError,
+  type ApiProdutor,
+  type ApiScoreResult,
+} from '../services/api/krillApi'
+import {
+  buildRecommendation,
+  classificacaoToRating,
+  classificacaoToStatus,
+  fatorNotaToRiskFactor,
+} from '../services/api/mappers'
 import { STATUS_META } from '../utils/rating'
 
 function Produtor() {
   const { id } = useParams()
-  const client = id ? getClientById(id) : undefined
+  const [produtor, setProdutor] = useState<ApiProdutor | null>(null)
+  const [score, setScore] = useState<ApiScoreResult | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const report = useMemo(
-    () => (client ? buildRiskReportForRating(client.rating) : null),
-    [client],
-  )
+  useEffect(() => {
+    if (!id) return
+    let cancelled = false
 
-  if (!client || !report) {
+    async function load() {
+      setLoading(true)
+      setError(null)
+
+      try {
+        const [produtorData, scoreData] = await Promise.all([
+          getProdutor(id as string),
+          getScore(id as string),
+        ])
+
+        if (cancelled) return
+        setProdutor(produtorData)
+        setScore(scoreData)
+      } catch (err) {
+        if (!cancelled) {
+          setProdutor(null)
+          setScore(null)
+          setError(
+            err instanceof KrillApiError
+              ? err.message
+              : 'Não foi possível carregar este produtor na API local.',
+          )
+        }
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    load()
+    return () => {
+      cancelled = true
+    }
+  }, [id])
+
+  if (loading) {
+    return (
+      <PageShell title="Carregando..." subtitle="Consultando a API local em http://localhost:8000.">
+        <div className="flex items-center justify-center gap-2 rounded-2xl border border-sage-200/70 bg-white p-8 text-sm text-sage-500 shadow-softer">
+          <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.2} />
+          Carregando produtor...
+        </div>
+      </PageShell>
+    )
+  }
+
+  if (error || !produtor || !score) {
     return (
       <PageShell title="Cliente não encontrado" subtitle="Verifique o link acessado.">
         <div className="rounded-2xl border border-sage-200/70 bg-white p-8 text-center shadow-softer">
           <p className="text-sm text-sage-500">
-            Não encontramos um cliente com este identificador na carteira demonstrativa.
+            {error ?? 'Não encontramos um cliente com este identificador na API local.'}
           </p>
           <Link
             to="/carteira"
@@ -36,10 +94,15 @@ function Produtor() {
     )
   }
 
+  const rating = classificacaoToRating(score.classificacao)
+  const status = classificacaoToStatus(score.classificacao)
+  const factors = score.notas_fatores.map(fatorNotaToRiskFactor)
+  const recommendation = buildRecommendation(score.notas_fatores)
+
   return (
     <PageShell
-      title={client.name}
-      subtitle={`${client.culture} · ${client.region} (${client.state})`}
+      title={produtor.nome}
+      subtitle={`${produtor.cultura} · ${produtor.regiao}`}
     >
       <div className="mx-auto flex max-w-4xl flex-col gap-6">
         <Link
@@ -51,28 +114,29 @@ function Produtor() {
         </Link>
 
         <div className="rounded-xl border border-dashed border-sage-300 bg-sage-50 px-4 py-2.5 text-xs font-medium text-sage-500">
-          MOCK — dados de demonstração para {client.name}, sem relação com
-          clientes reais da KRILLTECH.
+          Dados calculados ao vivo pela API local (http://localhost:8000) — cliente_id:{' '}
+          {produtor.cliente_id}.
         </div>
 
         <ScreeningResult
-          clientName={client.name}
-          document={client.document}
-          score={client.score}
-          rating={client.rating}
-          operationalStatus={STATUS_META[client.status].label}
-          trend={report.trend}
-          factors={report.factors}
+          clientName={produtor.nome}
+          document={produtor.cliente_id}
+          score={score.score}
+          rating={rating}
+          operationalStatus={STATUS_META[status].label}
+          trend={{ direction: 'stable', label: 'Tendência histórica não disponível na API local.' }}
+          factors={factors}
           evidences={[]}
-          recommendationTitle={report.recommendationTitle}
-          recommendationBody={report.recommendationBody}
+          recommendationTitle={recommendation.title}
+          recommendationBody={recommendation.body}
         />
 
         <SimulatorPanel
-          currentScore={client.score}
-          currentRating={client.rating}
-          currentRevenue={client.annualRevenue}
-          fixedCosts={client.fixedCosts}
+          clienteId={produtor.cliente_id}
+          currentScore={score.score}
+          currentRating={rating}
+          currentRevenue={produtor.receita_esperada}
+          fixedCosts={produtor.custo_total}
         />
       </div>
     </PageShell>

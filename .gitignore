@@ -1,0 +1,13 @@
+# Segredos / credenciais locais
+.env
+.env.*
+watsonx/.env
+
+# Node
+node_modules/
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store

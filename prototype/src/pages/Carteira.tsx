@@ -1,13 +1,13 @@
-import { Filter } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { Filter, Loader2 } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 import ClientTable from '../components/dashboard/ClientTable'
 import PageShell from '../components/layout/PageShell'
-import { mockClients } from '../data/mockClients'
-import type { ClientStatus } from '../types/portfolio'
+import { getProdutores, getRanking, KrillApiError } from '../services/api/krillApi'
+import { produtorAndRankingToPortfolioClient } from '../services/api/mappers'
+import type { ClientStatus, PortfolioClient } from '../types/portfolio'
 import type { Rating } from '../types/risk'
 import { STATUS_META } from '../utils/rating'
 
-const REGIONS = ['Todas', ...Array.from(new Set(mockClients.map((c) => c.region)))]
 const RATINGS: Array<'Todos' | Rating> = ['Todos', 'A', 'B', 'C', 'D']
 const STATUSES: Array<'Todos' | ClientStatus> = [
   'Todos',
@@ -18,18 +18,70 @@ const STATUSES: Array<'Todos' | ClientStatus> = [
 ]
 
 function Carteira() {
+  const [clients, setClients] = useState<PortfolioClient[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
   const [region, setRegion] = useState('Todas')
   const [rating, setRating] = useState<'Todos' | Rating>('Todos')
   const [status, setStatus] = useState<'Todos' | ClientStatus>('Todos')
 
+  useEffect(() => {
+    let cancelled = false
+
+    async function load() {
+      setLoading(true)
+      setError(null)
+
+      try {
+        const [produtores, rankingResponse] = await Promise.all([
+          getProdutores(),
+          getRanking(),
+        ])
+
+        if (cancelled) return
+
+        const rankingById = new Map(
+          rankingResponse.ranking.map((entry) => [entry.cliente_id, entry]),
+        )
+
+        setClients(
+          produtores.map((produtor) =>
+            produtorAndRankingToPortfolioClient(produtor, rankingById.get(produtor.cliente_id)),
+          ),
+        )
+      } catch (err) {
+        if (!cancelled) {
+          setError(
+            err instanceof KrillApiError
+              ? err.message
+              : 'Não foi possível carregar a carteira da API local.',
+          )
+        }
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    load()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const REGIONS = useMemo(
+    () => ['Todas', ...Array.from(new Set(clients.map((c) => c.region)))],
+    [clients],
+  )
+
   const filtered = useMemo(() => {
-    return mockClients.filter((client) => {
+    return clients.filter((client) => {
       if (region !== 'Todas' && client.region !== region) return false
       if (rating !== 'Todos' && client.rating !== rating) return false
       if (status !== 'Todos' && client.status !== status) return false
       return true
     })
-  }, [region, rating, status])
+  }, [clients, region, rating, status])
 
   return (
     <PageShell
@@ -80,12 +132,19 @@ function Carteira() {
           </select>
 
           <span className="ml-auto text-xs text-sage-500">
-            Mostrando {filtered.length} de 48 clientes
+            Mostrando {filtered.length} de {clients.length} clientes
           </span>
         </div>
 
         <div className="mt-5">
-          {filtered.length === 0 ? (
+          {loading ? (
+            <p className="flex items-center justify-center gap-2 py-10 text-center text-sm text-sage-500">
+              <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.2} />
+              Carregando carteira da API local (http://localhost:8000)...
+            </p>
+          ) : error ? (
+            <p className="py-10 text-center text-sm text-alert-red-600">{error}</p>
+          ) : filtered.length === 0 ? (
             <p className="py-10 text-center text-sm text-sage-500">
               Nenhum cliente encontrado com os filtros selecionados.
             </p>
