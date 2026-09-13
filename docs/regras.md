@@ -254,3 +254,17 @@ A tecnologia deve servir à solução, e não o contrário.
 - [ ] Papéis definidos
 - [ ] Perguntas difíceis antecipadas
 - [ ] Respostas preparadas
+
+---
+
+## 13. Orientações recebidas da organização sobre o Project Model Canvas
+
+Mensagem da coordenação (Ana Paula Sometes) em 12/09/2026, esclarecendo dúvidas do grupo sobre o entregável:
+
+- O **Project Model Canvas é entregável obrigatório**. Ele existe para a equipe sintetizar o que é mais importante no projeto.
+- Existem versões coloridas do modelo e a versão preto e branco que foi enviada pela organização — **os campos não mudam** entre elas.
+- O Canvas deve ser **preenchido de acordo com o modelo oficial** (autoria: José Finocchio Junior), respeitando os blocos e a estrutura do template, não um layout livre.
+- No momento do pitch, a equipe pode optar por apresentar em tela o Project Model Canvas, os slides, ou a própria solução — **fica a critério da equipe**.
+- **Atenção:** não confundir **Business Model Canvas** com **Project Model Canvas** — o exigido pela organização é o **Project**.
+
+> Referência: `canvas/project-model-canvas.html` (fonte) e `canvas/KrillRadar-Project-Model-Canvas.pdf` (entregável) seguem a estrutura oficial do Project Model Canvas — blocos: GP, Justificativa, Objetivo SMART, Benefícios (coluna "Pitch"), Produto, Requisitos, Stakeholders Externos & Fatores Externos, Equipe, Restrições, Premissas, Grupo de Entregas, Riscos, Linha do Tempo, Custos.
