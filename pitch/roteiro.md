@@ -1,33 +1,113 @@
-Pitch (3 min) — versão com persona
+## 0:00–0:20 — O PROBLEMA
 
-0:00–0:25 — Apresentar o Marcelo
+> “Esse é o Davi, gestor comercial e de crédito da KRILLTECH.
+>
+> Todos os dias, ele precisa decidir para quais produtores pode vender a prazo.
+>
+> E existe um problema: um produtor pode estar pagando tudo certinho hoje e, alguns meses depois, começar a ter dificuldades.
+>
+> O problema é descobrir isso tarde demais.”
 
-"Esse é o Marcelo, 42 anos, Gestor Comercial e de Crédito da KRILLTECH. Todo dia, ele decide para quais produtores a empresa vende Arbolin a prazo, e quanto ela pode ficar exposta a cada um."
+---
 
-0:25–0:55 — A dor real dele (não é o óbvio)
+## 0:20–0:45 — A DOR DO DAVI
 
-"O Marcelo não tem medo do cliente que já está inadimplente — esse ele já vê. Ele tem medo daquele que parece saudável hoje e vai parar de pagar daqui a seis meses. A KRILLTECH vende R$ 500 mil em Arbolin a um produtor que paga em dia. Verde, tudo certo. Só que vem El Niño, a produtividade cai, a receita cai — e, em paralelo, começam a aparecer sinais jurídicos. O Marcelo só descobre quando o produtor já entrou com recuperação judicial. A pergunta dele é: 'por que ninguém me avisou quando ainda dava para agir?'"
+> “Para analisar um produtor, o Davi precisa olhar várias informações: cadastro, processos judiciais, questões ambientais, safra e clima.
+>
+> Essas informações estão espalhadas.
+>
+> Então, o desafio não é ter os dados.
+>
+> **É conseguir juntar tudo e entender o que eles significam.**”
 
-0:55–1:25 — Demo ao vivo, Fluxo 1: TRIAGEM (tela: buscar CNPJ de cliente novo)
+---
 
-"É por isso que existe o Sentinela Krill. Antes de fechar negócio com um produtor novo, o Marcelo digita o CNPJ aqui." (digitar ao vivo) "Em segundos, cruzamos situação cadastral, histórico judicial, embargos ambientais e o contexto de safra e clima da região dele." (relatório aparece)
+## 0:45–1:10 — A SOLUÇÃO
 
-1:25–1:50 — Demo ao vivo, Fluxo 2: RADAR DA CARTEIRA (tela: Carteira)
+> “Foi para resolver isso que criamos o **KRILLRADAR**.
+>
+> O Davi coloca o CNPJ de um produtor e o sistema busca e cruza essas informações automaticamente.
+>
+> Ele verifica dados da Receita Federal, processos judiciais, informações ambientais, safra e clima.
+>
+> E no final, não entrega só um número.
+>
+> **Mostra o nível de risco e explica o motivo.**”
 
-"Mas o Marcelo não gerencia um cliente — gerencia uma carteira inteira. Essa é a tela que eu mostraria ao CEO." (abrir Carteira) "Cada bolha é um produtor: quanto mais à esquerda, menor o score; quanto maior a bolha, maior a exposição da KRILLTECH. Quem está aqui" (apontar para o canto inferior esquerdo, zona sombreada) "é quem pode fazer a empresa perder mais dinheiro se o cenário piorar — não é uma lista, é a pergunta 'onde eu olho primeiro' respondida visualmente."
+*(Mostrar a análise acontecendo.)*
 
-1:50–2:20 — Demo ao vivo, Fluxo 3: MONITORAMENTO (tela: drill-down do produtor)
+---
 
-"Ele clica num produtor específico." (abrir o drill-down) "Aqui não é só o score de hoje — é de onde o score veio, onde está, e para onde o cenário simulado projeta se a produtividade cair, com El Niño ou qualquer outro choque climático." (mostrar o gráfico Histórico → Atual → Projetado) "E do lado, a exposição da KRILLTECH comparada à margem líquida do produtor — dá para ver, em uma régua, se ele teria como pagar." (mostrar Exposição x capacidade de pagamento) "A recomendação: não ampliar exposição, rever condições, intensificar monitoramento. Agora o Marcelo consegue agir antes do problema — não quando o produtor já está em recuperação judicial."
+## 1:10–1:35 — TRIAGEM E MONITORAMENTO
 
-2:20–2:30 — O relatório padronizado (o fio comum)
+> “E o KRILLRADAR não serve só para analisar um produtor antes da venda.
+>
+> Ele funciona em dois momentos.
+>
+> Primeiro, na **triagem**: o Davi analisa o produtor antes de decidir se vale a pena vender a prazo.
+>
+> Depois, no **monitoramento**: mesmo depois da venda, o produtor continua sendo acompanhado.
+>
+> Se os sinais de risco mudarem, o Davi consegue perceber isso.”
 
-"Triagem de cliente novo ou monitoramento de carteira — os dois terminam no mesmo Relatório Padronizado de Risco: score, fatores explicados, evidência de cada um. Nunca 'risco alto: 82%' sem dizer por quê."
+*(Mostrar o radar da carteira.)*
 
-2:30–2:45 — Diferencial técnico
+> “Assim, ele não precisa olhar produtor por produtor em uma planilha.”
 
-"Tudo com dados públicos reais — Receita, base judicial do CNJ, IBAMA — orquestrados por agentes de IA no watsonx Orchestrate da IBM: um coleta, um simula, um explica, um recomenda."
+---
 
-2:45–3:00 — Fechamento
+## 1:35–2:10 — O MOMENTO PRINCIPAL
 
-"Não construímos mais um dashboard. Construímos a resposta para a pergunta do Marcelo: 'por que ninguém me avisou quando ainda dava para agir?' Agora, alguém avisa."
+> “Agora vamos pegar um produtor que hoje parece estar bem.
+>
+> Ele paga em dia e tem um risco baixo.
+>
+> Mas podemos fazer uma pergunta:
+>
+> **E se a produtividade dessa safra cair 20%?**”
+
+*(Acionar o simulador e fazer uma pausa.)*
+
+> “O KRILLRADAR simula esse cenário.
+>
+> O risco aumenta, a capacidade de pagamento diminui e a exposição da KRILLTECH fica mais preocupante.
+>
+> Nesse caso, o sistema recomenda:
+>
+> **não aumentar a exposição agora.**
+>
+> A decisão continua sendo do Davi.
+>
+> Mas agora ele consegue tomar essa decisão com mais informação.”
+
+---
+
+## 2:10–2:35 — RELATÓRIO
+
+> “E toda essa análise também pode virar um **relatório de risco**.
+>
+> O Davi consegue ver o score, os motivos daquele risco e as informações que levaram o sistema até aquela conclusão.
+>
+> Assim, a KRILLTECH não fica apenas com um número.
+>
+> **Fica com uma análise que pode ser consultada e acompanhada.**”
+
+---
+
+## 2:35–2:50 — O DIFERENCIAL
+
+> “O nosso diferencial é juntar três coisas em um só lugar:
+>
+> **o risco do produtor, quanto a KRILLTECH tem a perder e o que pode acontecer se o cenário mudar.**
+>
+> E todo esse processo é orquestrado com IA usando o watsonx Orchestrate.”
+
+---
+
+## 2:50–3:00 — FECHAMENTO
+
+> “O Davi não precisa de mais dados.
+>
+> Ele precisa saber **quem merece sua atenção e quando agir.**
+>
+> **KRILLRADAR: antes que o risco vire prejuízo.**”
